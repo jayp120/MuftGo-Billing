@@ -6,6 +6,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 const { printPdfFile } = require('./print-pdf');
 const { hardenPrintWindow } = require('./print-window-guard');
+const { isVirtualPrinter } = require('./virtual-printers');
 const rawPrintService = require('./raw-print-service');
 
 /* How long the printer list may be remembered. Long enough that a receipt
@@ -435,10 +436,35 @@ class HardwareManager {
 
     if (!match) {
       const available = printers.map(p => p.displayName || p.name).filter(Boolean).join(', ');
-      throw new Error(`Printer not found: ${requested}${available ? `. Available printers: ${available}` : ''}`);
+      throw new Error(`Printer not found: ${requested}${available ? `. Available printers: ${available}` : ''}. Open Hardware Manager and choose your thermal/A4 printer — do not use a PDF/XPS writer.`);
+    }
+
+    /*
+     * MuftGo Billing (white-label): refuse virtual printers for silent jobs.
+     *
+     * SHOP SYMPTOM THIS FIXES: click Print → a dialog opens, loads OneDrive,
+     * then errors. That dialog is the PDF/XPS "save to file" picker: a silent
+     * receipt addressed to "Microsoft Print to PDF" / "XPS Document Writer" /
+     * "OneNote" / "Fax" has nowhere physical to go, so Windows asks where to
+     * save — defaulting to OneDrive Documents, which stalls on sync and fails.
+     * Failing fast with a named fix beats a hanging save dialog every time.
+     */
+    if (isVirtualPrinter(match.name) || isVirtualPrinter(match.displayName)) {
+      throw new Error(`"${match.displayName || match.name}" cannot print receipts — it saves files instead of printing. Open Hardware Manager and choose your thermal (80/58mm) or A4 printer.`);
     }
 
     return match.name;
+  }
+
+  /*
+   * First PHYSICAL printer, for fallbacks that must never land on a
+   * file-writer. Used by getDefaultPrinter below: the old code returned
+   * printers[0], which on a fresh Windows 10/11 till is very often
+   * "Microsoft Print to PDF" — the exact route into the OneDrive save dialog.
+   */
+  _firstPhysicalPrinter(printers) {
+    const list = Array.isArray(printers) ? printers : [];
+    return list.find((p) => !isVirtualPrinter(p && p.name) && !isVirtualPrinter(p && p.displayName)) || null;
   }
 
   async _waitForPrintPage(webContents) {
@@ -681,12 +707,28 @@ class HardwareManager {
   async getDefaultPrinter() {
     try {
       const printers = await this.listPrinters();
-      const defaultPrinter = printers.find(p => p.isDefault);
-      if (defaultPrinter) {
-        console.log('Default printer:', defaultPrinter.name);
-        return defaultPrinter;
+      const flagged = printers.find(p => p.isDefault);
+      /*
+       * Never hand a file-writer back as "the default" for silent printing:
+       * on stock Windows 10/11 the default queue is frequently Microsoft
+       * Print to PDF, and a receipt sent there becomes the OneDrive save
+       * dialog instead of paper. Prefer the flagged default only when it is
+       * physical; otherwise fall back to the first physical queue and say so.
+       */
+      if (flagged && !isVirtualPrinter(flagged.name) && !isVirtualPrinter(flagged.displayName)) {
+        console.log('Default printer:', flagged.name);
+        return flagged;
       }
-      console.warn('No default printer found');
+      if (flagged) {
+        console.warn(`Default printer "${flagged.displayName || flagged.name}" is a file-writer; looking for a physical printer instead`);
+      }
+      const physical = this._firstPhysicalPrinter(printers);
+      if (physical) {
+        if (!flagged) console.warn('No default printer found; using first physical printer:', physical.name);
+        else console.warn('Using physical printer instead of default:', physical.name);
+        return physical;
+      }
+      console.warn('No physical printer found');
       return printers.length > 0 ? printers[0] : null;
     } catch (error) {
       console.error('Failed to get default printer:', error);
@@ -879,9 +921,12 @@ try {
    * Works for USB, network and local queues without needing the printer
    * shared, which the alternatives all require.
    */
-  async sendRawToPrinter(printerName, buffer, docName = 'Posnic Receipt') {
-    if (!printerName) return { success: false, error: 'No printer chosen' };
+  async sendRawToPrinter(printerName, buffer, docName = 'MuftGo Billing Receipt') {
+    if (!printerName) return { success: false, error: 'No printer chosen. Open Hardware Manager and choose your thermal printer.' };
     if (!buffer || !buffer.length) return { success: false, error: 'Nothing to print' };
+    if (isVirtualPrinter(printerName)) {
+      return { success: false, error: `"${printerName}" cannot print receipts — it saves files instead of printing. Open Hardware Manager and choose your thermal (80/58mm) printer.` };
+    }
 
     /*
      * Windows spools RAW through winspool; everything else goes through CUPS.
@@ -1118,4 +1163,4 @@ try {
   }
 }
 
-module.exports = { HardwareManager };
+module.exports = { HardwareManager, isVirtualPrinter };

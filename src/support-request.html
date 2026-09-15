@@ -142,7 +142,7 @@
         CTX = await window.electronAPI.support.context();
         const s = CTX.system;
         $('sysSummary').textContent =
-          `Posnic ${s.app} · ${s.osName} ${s.platform} · ${s.memoryGB} GB · `
+          `MuftGo Billing ${s.app} · ${s.osName} ${s.platform} · ${s.memoryGB} GB · `
           + (s.cloud ? `cloud ${new URL(s.cloud.gatewayUrl).hostname}` : 'no cloud connected');
         $('logPeek').textContent = CTX.logTail.length
           ? CTX.logTail.slice(-40).join('\n')
@@ -163,7 +163,7 @@
           $('copyLog').style.display = 'inline-block';
           /* The email fields are for a reply we will not be sending. */
           for (const id of ['name', 'email', 'phone']) $(id).closest('div').style.display = 'none';
-          $('destination').textContent = 'This opens github.com/Posnic/POS/issues in your browser.';
+          $('destination').textContent = 'This opens github.com/jayp120/MuftGo-Billing/issues in your browser.';
         }
       } catch (e) {
         say('Could not gather the details: ' + e.message, 'err');

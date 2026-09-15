@@ -207,7 +207,7 @@ function html() {
 </style></head>
 <body>
   ${mark ? `<div class="mark"><img alt="" src="${mark}"></div>` : ''}
-  <h1>Posnic</h1>
+  <h1>MuftGo Billing</h1>
   <p>Starting your till&hellip;</p>
   <div class="bar"><i></i></div>
   <div class="step"></div>

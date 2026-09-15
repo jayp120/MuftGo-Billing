@@ -1,9 +1,9 @@
 {
-  "name": "posnic",
+  "name": "muftgo-billing",
   "version": "1.6.1",
-  "description": "Free, offline-first point-of-sale software for retail and restaurants, with open source POS code and billing workflows. Posnic source is AGPL-3.0-only; packages contain separately licensed components.",
+  "description": "MuftGo Billing — free, offline-first point-of-sale software for retail shops (clothing, kirana, restaurant). Based on Posnic POS source (AGPL-3.0-only); packages contain separately licensed components.",
   "main": "src/main.js",
-  "desktopName": "com.posnic.app.desktop",
+  "desktopName": "com.muftgo.billing.desktop",
   "scripts": {
     "postinstall": "node scripts/enable-installer-extraction-details.js",
     "prepare": "husky",
@@ -17,6 +17,9 @@
     "prepare:bundle": "node scripts/enable-installer-extraction-details.js && npm run prepare:vc-runtime && npm run prepare:frontend && npm run prepare:api-runtime && npm run prepare:sync-agent",
     "prebuild": "npm run clear:brand-seed && npm run check:mongodb && npm run prepare:bundle",
     "build": "electron-builder --win --x64",
+    "seed:muftgo-brand": "node scripts/seed-muftgo-brand.js",
+    "prebuild:muftgo": "npm run clear:brand-seed && npm run seed:muftgo-brand && npm run check:mongodb && npm run prepare:bundle",
+    "build:muftgo": "electron-builder --win --x64",
     "prebuild:fast": "npm run clear:brand-seed && npm run check:mongodb && npm run prepare:bundle",
     "build:fast": "electron-builder --win --x64 --dir",
     "prebuild:quick": "npm run clear:brand-seed && npm run check:mongodb && npm run prepare:bundle",
@@ -63,13 +66,13 @@
     "api/{src,tests}/**/*.js": "node scripts/lint-staged-api.js"
   },
   "build": {
-    "appId": "com.posnic.app",
-    "productName": "Posnic",
+    "appId": "com.muftgo.billing",
+    "productName": "MuftGo Billing",
     "protocols": [
       {
-        "name": "Posnic",
+        "name": "MuftGo Billing",
         "schemes": [
-          "posnic"
+          "muftgo-billing"
         ]
       }
     ],
@@ -104,7 +107,7 @@
       "src/window-theme.js",
       "src/window-theme.css",
       "src/cloud-setup.html",
-      "builds/512-posnic.png",
+      "builds/512-muftgo.png",
       "builds/icon-256.png",
       "src/loading.html",
       "src/install-wizard.html",
@@ -128,6 +131,7 @@
       "src/bill-manager.js",
       "src/print-window-guard.js",
       "src/print-pdf.js",
+      "src/virtual-printers.js",
       "src/escpos-receipt.js",
       "src/escpos-preview.js",
       "src/order-source.js",
@@ -370,13 +374,6 @@
       ],
       "verifyUpdateCodeSignature": true,
       "signAndEditExecutable": true,
-      "signtoolOptions": {
-        "publisherName": "BillMax",
-        "signingHashAlgorithms": [
-          "sha256"
-        ],
-        "sign": "scripts/sign-windows.js"
-      },
       "extraResources": [
         {
           "from": "mongodb",
@@ -401,8 +398,8 @@
     },
     "publish": {
       "provider": "github",
-      "owner": "Posnic",
-      "repo": "POS",
+      "owner": "jayp120",
+      "repo": "MuftGo-Billing",
       "releaseType": "release",
       "private": false
     },
@@ -413,7 +410,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": "always",
       "createStartMenuShortcut": true,
-      "shortcutName": "Posnic",
+      "shortcutName": "MuftGo Billing",
       "deleteAppDataOnUninstall": false,
       "runAfterFinish": true,
       "include": "builds/installer.nsh",
@@ -432,7 +429,7 @@
       "license": "builds/installer-license.txt"
     },
     "mac": {
-      "icon": "builds/512-posnic.png",
+      "icon": "builds/512-muftgo.png",
       "category": "public.app-category.business",
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
@@ -470,10 +467,10 @@
       ]
     },
     "linux": {
-      "icon": "builds/512-posnic.png",
+      "icon": "builds/512-muftgo.png",
       "syncDesktopName": true,
       "category": "Office",
-      "maintainer": "info@posnic.com",
+      "maintainer": "info@muftgo.com",
       "target": [
         {
           "target": "AppImage",
@@ -495,7 +492,7 @@
         }
       ],
       "synopsis": "Free open-source point of sale",
-      "description": "Posnic POS: billing, inventory, restaurant mode and reports. Offline-first, free and open source.",
+      "description": "MuftGo Billing: billing, inventory, clothing-retail mode and GST reports. Offline-first, free and open source (based on Posnic POS).",
       "extraResources": [
         {
           "from": "mongodb",
@@ -523,14 +520,14 @@
     "deb": {
       "artifactName": "${name}_${version}_${arch}.${ext}",
       "fpm": [
-        "builds/linux/com.posnic.app.metainfo.xml=/usr/share/metainfo/com.posnic.app.metainfo.xml"
+        "builds/linux/com.muftgo.billing.metainfo.xml=/usr/share/metainfo/com.muftgo.billing.metainfo.xml"
       ]
     },
     "afterPack": "scripts/after-pack.js",
     "snap": {
       "confinement": "strict",
       "grade": "stable",
-      "summary": "Free open-source point of sale",
+      "summary": "MuftGo Billing - free open-source point of sale",
       "plugs": [
         "default",
         "network-bind",
@@ -538,7 +535,7 @@
       ]
     }
   },
-  "author": "Posnic Innovations Private Limited",
+  "author": "MuftGo (based on Posnic POS by Posnic Innovations Private Limited)",
   "license": "AGPL-3.0-only",
   "devDependencies": {
     "7zip-bin": "^5.2.0",
@@ -567,12 +564,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Posnic/POS.git"
+    "url": "git+https://github.com/jayp120/MuftGo-Billing.git"
   },
   "bugs": {
-    "url": "https://github.com/Posnic/POS/issues"
+    "url": "https://github.com/jayp120/MuftGo-Billing/issues"
   },
-  "homepage": "https://www.posnic.com/",
+  "homepage": "https://muftgo.com/",
   "keywords": [
     "pos",
     "open-source-pos",

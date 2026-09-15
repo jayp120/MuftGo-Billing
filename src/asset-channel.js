@@ -29,7 +29,7 @@ const os = require('os');
 const path = require('path');
 const { execFile } = require('child_process');
 
-const FEED_BASE = 'https://github.com/Posnic/POS/releases/latest/download';
+const FEED_BASE = 'https://github.com/jayp120/MuftGo-Billing/releases/latest/download';
 
 /* Plain numeric semver compare; returns <0, 0, >0. Non-semver never wins. */
 function compareVersions(a, b) {

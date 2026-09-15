@@ -1,4 +1,4 @@
-; Posnic - Custom NSIS Installer Script
+; MuftGo Billing - Custom NSIS Installer Script (based on Posnic POS)
 ; This script is included during the installation process
 
 ; Ultra-fast installation like VSCode/Windsurf
@@ -28,19 +28,19 @@ SetDatablockOptimize on
 ; finish page announced "Posnic is installed" at the end of an uninstall.
 ; Owner: "i saw message like pos installed on the end while uninstalled."
 !ifdef BUILD_UNINSTALLER
-  !define MUI_WELCOMEPAGE_TITLE "Remove Posnic"
-  !define MUI_WELCOMEPAGE_TEXT "This removes the Posnic application from this computer.$\r$\n$\r$\nYour sales, stock and customers stay in the data folder; they are not deleted.$\r$\n$\r$\nClose any running copy of Posnic before continuing."
-  !define MUI_FINISHPAGE_TITLE "Posnic is removed"
-  !define MUI_FINISHPAGE_TEXT "The application has been removed from this computer.$\r$\n$\r$\nYour data folder was kept, so installing Posnic again picks up where you left off."
+  !define MUI_WELCOMEPAGE_TITLE "Remove MuftGo Billing"
+  !define MUI_WELCOMEPAGE_TEXT "This removes the MuftGo Billing application from this computer.$\r$\n$\r$\nYour sales, stock and customers stay in the data folder; they are not deleted.$\r$\n$\r$\nClose any running copy of MuftGo Billing before continuing."
+  !define MUI_FINISHPAGE_TITLE "MuftGo Billing is removed"
+  !define MUI_FINISHPAGE_TEXT "The application has been removed from this computer.$\r$\n$\r$\nYour data folder was kept, so installing MuftGo Billing again picks up where you left off."
 !else
-  !define MUI_WELCOMEPAGE_TITLE "Welcome to Posnic"
-  !define MUI_WELCOMEPAGE_TEXT "Posnic is a point of sale that works without internet. Your sales, stock and customers stay on this computer.$\r$\n$\r$\nSetup installs the application and its database. The first launch takes a few minutes while the database is prepared; later launches take seconds.$\r$\n$\r$\nClose any running copy of Posnic before continuing."
+  !define MUI_WELCOMEPAGE_TITLE "Welcome to MuftGo Billing"
+  !define MUI_WELCOMEPAGE_TEXT "MuftGo Billing is a point of sale that works without internet. Your sales, stock and customers stay on this computer.$\r$\n$\r$\nSetup installs the application and its database. The first launch takes a few minutes while the database is prepared; later launches take seconds.$\r$\n$\r$\nClose any running copy of MuftGo Billing before continuing."
   ; Kept short on purpose. MUI gives the finish page a fixed text area above the
   ; "run now" checkbox and silently clips whatever does not fit - the first
   ; version of this ended mid-sentence at "your data is on this".
-  !define MUI_FINISHPAGE_TITLE "Posnic is installed"
+  !define MUI_FINISHPAGE_TITLE "MuftGo Billing is installed"
   !define MUI_FINISHPAGE_TEXT "The first launch prepares the database and opens the setup wizard, where you name your shop and create an administrator account.$\r$\n$\r$\nKeep that password safe. Your data lives on this machine."
-  !define MUI_FINISHPAGE_RUN_TEXT "Start Posnic now"
+  !define MUI_FINISHPAGE_RUN_TEXT "Start MuftGo Billing now"
 !endif
 
 
@@ -63,11 +63,11 @@ Var POSNIC_DELETE_DATA
 ; Add a Start Menu folder selection step after the install-location page.
 ; Existing branding, icons, install logic, and finish page remain unchanged.
 !macro customPageAfterChangeDir
-  !define MUI_STARTMENUPAGE_DEFAULTFOLDER "Posnic"
+  !define MUI_STARTMENUPAGE_DEFAULTFOLDER "MuftGo Billing"
   !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU"
-  !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\Posnic"
+  !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\MuftGoBilling"
   !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
-  !insertmacro MUI_PAGE_STARTMENU Posnic $POSNIC_START_MENU_FOLDER
+  !insertmacro MUI_PAGE_STARTMENU MuftGoBilling $POSNIC_START_MENU_FOLDER
 !macroend
 
 ; Detect same-machine repair/install-over-existing before files are replaced
@@ -91,25 +91,26 @@ Var POSNIC_DELETE_DATA
   DetailPrint "Preparing your database and setting up the till..."
   SetDetailsPrint both
   DetailPrint "========================================="
-  DetailPrint "Posnic Installation Starting"
+  DetailPrint "MuftGo Billing Installation Starting"
   DetailPrint "Installation started at: $\r$\n"
   DetailPrint "========================================="
 
   StrCmp $POSNIC_REPAIR_MODE "1" repair_mode_detected normal_install_mode
   repair_mode_detected:
     DetailPrint "REPAIR MODE DETECTED"
-    DetailPrint "Repairing Posnic application files..."
+    DetailPrint "Repairing MuftGo Billing application files..."
     DetailPrint "Database and backups will be kept."
     Goto install_mode_done
   normal_install_mode:
     DetailPrint "INSTALL/UPDATE MODE"
   install_mode_done:
   
-  ; ── Close any running instance of Posnic before installing ──
+  ; ── Close any running instance of MuftGo Billing before installing ──
   DetailPrint "[TIME CHECK] Step 1 START: Process termination"
   
   ; Kill all possible process names (fast mode)
   DetailPrint "Terminating running instances..."
+  nsExec::ExecToLog 'taskkill /F /IM "MuftGo Billing.exe" /T'
   nsExec::ExecToLog 'taskkill /F /IM "Posnic.exe" /T'
   nsExec::ExecToLog 'taskkill /F /IM "posnic.exe" /T'
   
@@ -120,7 +121,7 @@ Var POSNIC_DELETE_DATA
   DetailPrint "[TIME CHECK] Step 1 COMPLETE: Process termination done"
 
   DetailPrint "[TIME CHECK] Step 2 START: File extraction"
-  DetailPrint "Installing Posnic files..."
+  DetailPrint "Installing MuftGo Billing files..."
   DetailPrint "Target: $INSTDIR"
   DetailPrint "This may take 10-60 seconds depending on disk speed..."
   
@@ -130,29 +131,30 @@ Var POSNIC_DELETE_DATA
   DetailPrint "[TIME CHECK] Step 3 START: Shortcuts creation"
   
   DetailPrint "Creating desktop shortcut..."
-  CreateShortcut "$DESKTOP\Posnic.lnk" "$INSTDIR\${APP_EXECUTABLE_FILENAME}" "" "$INSTDIR\resources\app.ico" 0
+  CreateShortcut "$DESKTOP\MuftGo Billing.lnk" "$INSTDIR\${APP_EXECUTABLE_FILENAME}" "" "$INSTDIR\resources\app.ico" 0
   
   DetailPrint "Creating start menu shortcut..."
   ; electron-builder creates its default link before customInstall. Replace only
   ; that Start Menu link with the folder selected on the wizard page.
   Delete "$newStartMenuLink"
   RMDir "$SMPROGRAMS\Posnic"
-  !insertmacro MUI_STARTMENU_WRITE_BEGIN Posnic
+  RMDir "$SMPROGRAMS\MuftGo Billing"
+  !insertmacro MUI_STARTMENU_WRITE_BEGIN MuftGoBilling
     CreateDirectory "$SMPROGRAMS\$POSNIC_START_MENU_FOLDER"
-    CreateShortcut "$SMPROGRAMS\$POSNIC_START_MENU_FOLDER\Posnic.lnk" "$INSTDIR\${APP_EXECUTABLE_FILENAME}" "" "$INSTDIR\resources\app.ico" 0
-    StrCpy $newStartMenuLink "$SMPROGRAMS\$POSNIC_START_MENU_FOLDER\Posnic.lnk"
+    CreateShortcut "$SMPROGRAMS\$POSNIC_START_MENU_FOLDER\MuftGo Billing.lnk" "$INSTDIR\${APP_EXECUTABLE_FILENAME}" "" "$INSTDIR\resources\app.ico" 0
+    StrCpy $newStartMenuLink "$SMPROGRAMS\$POSNIC_START_MENU_FOLDER\MuftGo Billing.lnk"
     StrCpy $launchLink "$newStartMenuLink"
     WriteRegStr SHELL_CONTEXT "${INSTALL_REGISTRY_KEY}" MenuDirectory "$POSNIC_START_MENU_FOLDER"
   !insertmacro MUI_STARTMENU_WRITE_END
-  CreateDirectory "$DOCUMENTS\Posnic-Backups"
-  !insertmacro MUI_STARTMENU_WRITE_BEGIN Posnic
-    CreateShortcut "$SMPROGRAMS\$POSNIC_START_MENU_FOLDER\Open Posnic Backups.lnk" "$WINDIR\explorer.exe" "$DOCUMENTS\Posnic-Backups"
+  CreateDirectory "$DOCUMENTS\MuftGo-Billing-Backups"
+  !insertmacro MUI_STARTMENU_WRITE_BEGIN MuftGoBilling
+    CreateShortcut "$SMPROGRAMS\$POSNIC_START_MENU_FOLDER\Open MuftGo Billing Backups.lnk" "$WINDIR\explorer.exe" "$DOCUMENTS\MuftGo-Billing-Backups"
   !insertmacro MUI_STARTMENU_WRITE_END
   
   DetailPrint "[TIME CHECK] Step 3 COMPLETE: Shortcuts created"
   
   DetailPrint "[TIME CHECK] Step 4 START: Registry configuration"
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "Posnic" "$INSTDIR\${APP_EXECUTABLE_FILENAME}"
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "MuftGoBilling" "$INSTDIR\${APP_EXECUTABLE_FILENAME}"
   DetailPrint "[TIME CHECK] Step 4 COMPLETE: Registry configured"
   
   DetailPrint "========================================="
@@ -201,7 +203,7 @@ Var POSNIC_DELETE_DATA
 
   is_manual_fresh_install:
     DetailPrint "MANUAL INSTALL - User will launch app manually"
-    DetailPrint "Click desktop shortcut or start menu to launch Posnic"
+    DetailPrint "Click desktop shortcut or start menu to launch MuftGo Billing"
   
   end_restart_check:
   DetailPrint "[TIME CHECK] Installation process finished"
@@ -226,9 +228,9 @@ Var POSNIC_DELETE_DATA
   ; stalled there until it was answered.
   IfSilent unposnic_done
 
-  MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON1 "Keep your business data (sales database and backups)?$\r$\n$\r$\nYES - Keep my data (recommended). Reinstalling Posnic later will find everything exactly as it was.$\r$\n$\r$\nNO - I want to permanently delete everything from this computer." /SD IDYES IDYES unposnic_done
+  MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON1 "Keep your business data (sales database and backups)?$\r$\n$\r$\nYES - Keep my data (recommended). Reinstalling MuftGo Billing later will find everything exactly as it was.$\r$\n$\r$\nNO - I want to permanently delete everything from this computer." /SD IDYES IDYES unposnic_done
 
-  MessageBox MB_YESNO|MB_ICONEXCLAMATION|MB_DEFBUTTON2 "WARNING - PERMANENT DELETION$\r$\n$\r$\nThis will erase ALL sales history, inventory, customers and settings from this computer. If you do not use Posnic Cloud, this is the ONLY copy of your business data - it CANNOT be recovered.$\r$\n$\r$\nYour backup folder (Documents\Posnic-Backups) will also be deleted. If you may ever need this data, click NO now and first copy that folder to a pen drive or another computer.$\r$\n$\r$\nPermanently delete everything?" /SD IDNO IDYES unposnic_wipe
+  MessageBox MB_YESNO|MB_ICONEXCLAMATION|MB_DEFBUTTON2 "WARNING - PERMANENT DELETION$\r$\n$\r$\nThis will erase ALL sales history, inventory, customers and settings from this computer. If you do not use cloud sync, this is the ONLY copy of your business data - it CANNOT be recovered.$\r$\n$\r$\nYour backup folder (Documents\MuftGo-Billing-Backups) will also be deleted. If you may ever need this data, click NO now and first copy that folder to a pen drive or another computer.$\r$\n$\r$\nPermanently delete everything?" /SD IDNO IDYES unposnic_wipe
   Goto unposnic_done
 
   unposnic_wipe:
@@ -238,23 +240,29 @@ Var POSNIC_DELETE_DATA
 
 ; Custom uninstallation steps
 !macro customUnInstall
-  DetailPrint "Removing Posnic..."
+  DetailPrint "Removing MuftGo Billing..."
   DetailPrint "Removing startup launcher..."
   
   ; Remove from Windows startup registry
+  DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "MuftGoBilling"
   DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "Posnic"
-  ReadRegStr $0 HKCU "Software\Posnic" "Start Menu Folder"
+  ReadRegStr $0 HKCU "Software\MuftGoBilling" "Start Menu Folder"
   StrCmp $0 "" 0 +2
-    StrCpy $0 "Posnic"
+    StrCpy $0 "MuftGo Billing"
+  Delete "$SMPROGRAMS\$0\Open MuftGo Billing Backups.lnk"
   Delete "$SMPROGRAMS\$0\Open Posnic Backups.lnk"
+  Delete "$SMPROGRAMS\$0\MuftGo Billing.lnk"
+  Delete "$SMPROGRAMS\$0\Posnic.lnk"
   RMDir "$SMPROGRAMS\$0"
-  DeleteRegValue HKCU "Software\Posnic" "Start Menu Folder"
-  DeleteRegKey /ifempty HKCU "Software\Posnic"
+  DeleteRegValue HKCU "Software\MuftGoBilling" "Start Menu Folder"
+  DeleteRegKey /ifempty HKCU "Software\MuftGoBilling"
   
   DetailPrint "Cleaning up application data..."
   StrCmp $POSNIC_DELETE_DATA "1" 0 unskipdata
     DetailPrint "Deleting database and backups (user choice)..."
+    RMDir /r "$APPDATA\muftgo-billing"
     RMDir /r "$APPDATA\posnic"
+    RMDir /r "$DOCUMENTS\MuftGo-Billing-Backups"
     RMDir /r "$DOCUMENTS\Posnic-Backups"
   unskipdata:
 !macroend

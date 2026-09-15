@@ -55,7 +55,7 @@ class BackupManager {
   _getDefaultBackupPath() {
     try {
       const homeDir = require('os').homedir();
-      return path.join(homeDir, 'Documents', 'Posnic-Backups');
+      return path.join(homeDir, 'Documents', 'MuftGo-Billing-Backups');
     } catch (e) {
       return path.join(this.userDataPath, 'backups');
     }

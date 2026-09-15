@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Posnic - First Time Setup</title>
+    <title>MuftGo Billing - First Time Setup</title>
     <style>
         * {
             margin: 0;
@@ -729,7 +729,7 @@
 <body class="choosing">
     <div class="wizard-container">
         <div class="wizard-header">
-            <img src="../builds/512-posnic.png" alt="Posnic" class="wizard-logo">
+            <img src="../builds/512-muftgo.png" alt="MuftGo Billing" class="wizard-logo">
             <p>Point of Sale that never goes down</p>
         </div>
 
@@ -1538,7 +1538,7 @@ const form = document.getElementById('installForm');
             [22, 'Creating your database',          'Setting up local data storage'],
             [42, 'Securing your data',              'Generating credentials and enabling database authentication'],
             [62, 'Creating your business profile',  'Store details, admin account, taxes and defaults'],
-            [78, 'Configuring automatic backups',   'Daily backups to Documents\\Posnic-Backups'],
+            [78, 'Configuring automatic backups',   'Daily backups to Documents\\MuftGo-Billing-Backups'],
             [90, 'Finishing touches',               'Optimizing indexes and settings']
         ];
 
@@ -1595,7 +1595,7 @@ const form = document.getElementById('installForm');
                 return;
             }
 
-            let backupPathValue = 'Documents\\Posnic-Backups';
+            let backupPathValue = 'Documents\\MuftGo-Billing-Backups';
             try {
                 if (window.electron && window.electron.getDefaultBackupPath) {
                     const p = await window.electron.getDefaultBackupPath();
@@ -2312,18 +2312,18 @@ const form = document.getElementById('installForm');
         const backupDayOfWeek = document.getElementById('backupDayOfWeek');
         const backupRetention = document.getElementById('backupRetention');
 
-        // Set default backup path from Electron (Documents/Posnic-Backups)
+        // Set default backup path from Electron (Documents/MuftGo-Billing-Backups)
         async function initBackupDefaults() {
             try {
                 if (window.electron && window.electron.getDefaultBackupPath) {
                     const defaultPath = await window.electron.getDefaultBackupPath();
                     if (defaultPath) backupPath.value = defaultPath;
                 } else {
-                    backupPath.value = 'Documents\\Posnic-Backups';
+                    backupPath.value = 'Documents\\MuftGo-Billing-Backups';
                 }
             } catch (e) {
                 console.error('Failed to get default backup path:', e);
-                backupPath.value = 'Documents\\Posnic-Backups';
+                backupPath.value = 'Documents\\MuftGo-Billing-Backups';
             }
         }
         initBackupDefaults();

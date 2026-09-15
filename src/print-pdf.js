@@ -43,7 +43,22 @@ async function printPdfFile(file, { printer, copies = 1 } = {}) {
     const { print: printPdf } = require('pdf-to-printer');
     const opts = { silent: true, copies: count, scale: 'fit' };
     if (printer) opts.printer = printer;
-    await printPdf(file, opts);
+    try {
+      await printPdf(file, opts);
+    } catch (err) {
+      /*
+       * MuftGo Billing: name the printer and the next step. The raw error
+       * from SumatraPDF ("Unable to print...", win32 codes) tells a
+       * shopkeeper nothing; a hanging OneDrive save dialog tells them less.
+       * Most failures here are: printer off / out of paper, wrong queue
+       * (a PDF writer), or the spooler stopped.
+       */
+      const who = printer ? `"${printer}"` : 'the default printer';
+      const detail = err && err.message ? String(err.message) : String(err || 'unknown error');
+      throw new Error(
+        `Could not print on ${who} (${detail}). Check the printer is on with paper, then open Hardware Manager and choose your thermal (80/58mm) or A4 printer — not a PDF/XPS writer.`
+      );
+    }
     return;
   }
 

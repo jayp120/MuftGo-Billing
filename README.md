@@ -1,11 +1,16 @@
 <div align="center">
 
-<img src="builds/512-posnic.png" alt="Posnic" width="120">
+<img src="builds/512-muftgo.png" alt="MuftGo Billing" width="120">
 
-# Posnic
+# MuftGo Billing
 
-**Free open source POS and billing software with public source, local checkout
-and online/offline workflows.**
+**Free offline-first billing software for retail shops — clothing, kirana,
+restaurant — based on Posnic POS source (AGPL-3.0-only).**
+
+> **Origin:** this is a white-label fork of [Posnic POS](https://github.com/Posnic/POS)
+> (AGPL-3.0-only, © Posnic Innovations Private Limited). The Posnic name and logo
+> are trademarks and are not used here. See [WHITE-LABEL.md](WHITE-LABEL.md) for
+> what was renamed, what was kept, and your AGPL duties when you give this to a client.
 
 An offline-first POS for retail shops and restaurants. The primary API and
 database run on the shop computer or on a server you control; electronic

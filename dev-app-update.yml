@@ -1,6 +1,6 @@
-owner: Posnic
-repo: POS
+owner: jayp120
+repo: MuftGo-Billing
 provider: github
 releaseType: release
 private: true
-updaterCacheDirName: posnic-updater
+updaterCacheDirName: muftgo-billing-updater

@@ -1512,7 +1512,7 @@ ipcMain.handle('cloud:status', async () => {
   return { connected, sync };
 });
 
-ipcMain.handle('cloud:signup', () => shell.openExternal('https://www.posnic.com/cloud'));
+ipcMain.handle('cloud:signup', () => shell.openExternal('https://muftgo.com/contact'));
 /*
  * Pairing this till with a code, instead of the shop's password.
  *
@@ -1748,7 +1748,7 @@ ipcMain.handle('desktop:open', (_event, target) => {
     /* The renderer names an intent and this decides the address. Letting a page
        pass its own URL here would turn an allowlist into an open redirect for
        anything that can reach this channel. */
-    case 'releases': shell.openExternal('https://github.com/Posnic/POS/releases'); break;
+    case 'releases': shell.openExternal('https://github.com/jayp120/MuftGo-Billing/releases'); break;
     default: return false;
   }
   return true;
@@ -2202,12 +2202,26 @@ function createWindow(showStartupLoader = !isWarmStartup()) {
     event.preventDefault();
   });
 
-  // Handle downloads - show save dialog
+  // Handle downloads - show save dialog.
+  // MuftGo Billing hardening (Windows 10/11 + OneDrive Known-Folder-Move):
+  // the old code joined app.getPath('downloads') blindly and called
+  // showSaveDialogSync with no guard. On tills where Downloads/Documents are
+  // OneDrive namespaces, that dialog hangs enumerating OneDrive and then the
+  // save fails (ENOENT/EPERM), which the shop sees as "click Print/Save →
+  // OneDrive loads → error". The guards below: fall back to a local folder
+  // when Downloads is missing/OneDrive-stalled, catch dialog errors instead
+  // of dying silently, ensure the target directory exists, and surface the
+  // real failure in a message box rather than a console line nobody reads.
   mainWindow.webContents.session.on('will-download', (event, item, webContents) => {
     // setSavePath must happen during will-download. If we wait on the async
     // dialog promise, Chromium may already start writing to its default path.
     const filename = item.getFilename ? item.getFilename() : path.basename(item.getURL());
-    const defaultPath = path.join(app.getPath('downloads'), filename || 'download');
+    let downloadsDir = app.getPath('temp');
+    try {
+      const d = app.getPath('downloads');
+      if (d && fs.existsSync(d)) downloadsDir = d;
+    } catch (e) { /* keep temp fallback */ }
+    const defaultPath = path.join(downloadsDir, filename || 'download');
     const ext = path.extname(filename || '').replace('.', '');
     const filters = ext
       ? [
@@ -2216,12 +2230,24 @@ function createWindow(showStartupLoader = !isWarmStartup()) {
         ]
       : [{ name: 'All files', extensions: ['*'] }];
 
-    const result = dialog.showSaveDialogSync(mainWindow, {
-      title: 'Save file',
-      defaultPath,
-      buttonLabel: 'Save',
-      filters
-    });
+    let result = null;
+    try {
+      result = dialog.showSaveDialogSync(mainWindow, {
+        title: 'Save file',
+        defaultPath,
+        buttonLabel: 'Save',
+        filters
+      });
+    } catch (dialogErr) {
+      console.error('Save dialog failed:', dialogErr && dialogErr.message);
+      try { item.cancel(); } catch (e) { /* ignore */ }
+      dialog.showErrorBox(
+        'Could not save the file',
+        `The save window could not be opened (${dialogErr && dialogErr.message ? dialogErr.message : 'unknown error'}). ` +
+        'If your Documents/Downloads folder is synced with OneDrive, pause sync or choose a local folder (e.g. Desktop) and try again.'
+      );
+      return;
+    }
 
     if (!result) {
       try { item.cancel(); } catch (e) { /* ignore */ }
@@ -2229,10 +2255,16 @@ function createWindow(showStartupLoader = !isWarmStartup()) {
     }
 
     try {
+      const dir = path.dirname(result);
+      fs.mkdirSync(dir, { recursive: true });
       item.setSavePath(result);
     } catch (e) {
       console.error('Failed to set save path for download:', e.message);
       try { item.cancel(); } catch (cancelError) { /* ignore */ }
+      dialog.showErrorBox(
+        'Could not save the file',
+        `Could not save to "${result}" (${e.message}). Choose a local folder (Desktop works when OneDrive sync is slow) and try again.`
+      );
       return;
     }
 
@@ -2245,8 +2277,13 @@ function createWindow(showStartupLoader = !isWarmStartup()) {
     item.once('done', (evt, state) => {
       if (state === 'completed') {
         console.log('Download completed:', result);
+        try { shell.showItemInFolder(result); } catch (e) { /* nicety only */ }
       } else {
-        console.error('Download failed:', state);
+        console.error('Download failed:', state, '→', result);
+        dialog.showErrorBox(
+          'Download failed',
+          `The file could not be saved to "${result}" (status: ${state}). Check disk space and OneDrive sync, then try again.`
+        );
       }
     });
   });
@@ -2855,7 +2892,7 @@ ipcMain.handle('support:open-issue', (_event, details) => {
       '_Paste the log here — the Contact Support window has a button that copies it._',
     ].join('\n');
 
-    const url = 'https://github.com/Posnic/POS/issues/new'
+    const url = 'https://github.com/jayp120/MuftGo-Billing/issues/new'
       + '?title=' + encodeURIComponent(String(d.subject || '').slice(0, 120))
       + '&body=' + encodeURIComponent(body);
 
@@ -3061,7 +3098,7 @@ function openAboutWindow() {
    * Still an allowlist rather than "any https": this window has a preload,
    * and the point is that it never navigates to a page we did not choose.
    */
-  const allowedOrigins = new Set(['https://www.posnic.com', 'https://github.com']);
+  const allowedOrigins = new Set(['https://muftgo.com', 'https://www.posnic.com', 'https://github.com']);
   try { allowedOrigins.add(new URL(provider).origin); } catch (e) { /* keep the defaults */ }
   const opensExternally = (url) => {
     try { return allowedOrigins.has(new URL(url).origin); } catch (e) { return false; }
@@ -3099,7 +3136,8 @@ function openAboutWindow() {
     })
     .join('');
 
-  const REPO = 'https://github.com/Posnic/POS';
+  const REPO = 'https://github.com/jayp120/MuftGo-Billing';
+  const UPSTREAM = 'https://github.com/Posnic/POS';
 
   const html = `<!doctype html><html><head><meta charset="utf-8">
     <style>
@@ -3152,9 +3190,9 @@ function openAboutWindow() {
       ${logoTag}
       <h1>${esc(d.app.name)}</h1>
       <div class="ver">Version ${esc(d.app.version)}</div>
-      ${d.app.name === 'Posnic'
-        ? '<p class="by">by Posnic Innovations Private Limited &middot; Tamil Nadu, India</p>'
-        : `<p class="by">powered by Posnic &middot; ${esc(new URL(provider).hostname)}</p>`}
+      ${d.app.name === 'MuftGo Billing'
+        ? '<p class="by">by MuftGo &middot; muftgo.com &middot; Based on Posnic POS (AGPL-3.0-only)</p>'
+        : `<p class="by">powered by MuftGo Billing &middot; ${esc(new URL(provider).hostname)}</p>`}
     </div>
 
     <div class="body">
@@ -3185,7 +3223,7 @@ function openAboutWindow() {
       </div>
       <div class="repo">
         <div class="u">${esc(REPO)}</div>
-        <div class="n">Posnic is free software under the <b>GNU AGPL-3.0</b>. Every line running
+        <div class="n">MuftGo Billing is free software under the <b>GNU AGPL-3.0</b>, based on Posnic POS (${esc(UPSTREAM)}). Every line running
           on this computer is published there — you may read it, change it and pass it on.
           Select the address above to copy it.</div>
       </div>
@@ -3200,7 +3238,7 @@ function openAboutWindow() {
       </div>
       <div class="foot">
         Your sales and customers stay on this computer. Nothing here is sent anywhere
-        unless you connect Posnic Cloud.<br>
+        unless you connect cloud sync.<br>
         <b>Help &rarr; Contact Support</b> gathers all of this for you when you report a problem.
       </div>
     </div>
@@ -3630,11 +3668,11 @@ function showBackupNotification(result) {
   notification.show();
 }
 
-// Get default backup path (Documents/Posnic-Backups)
+// Get default backup path (Documents/MuftGo-Billing-Backups)
 ipcMain.handle('backup:get-default-path', () => {
   try {
     const documentsPath = app.getPath('documents');
-    return path.join(documentsPath, 'Posnic-Backups');
+    return path.join(documentsPath, 'MuftGo-Billing-Backups');
   } catch (e) {
     return path.join(app.getPath('userData'), 'backups');
   }
@@ -3911,7 +3949,7 @@ function createTray() {
     if (!fs.existsSync(iconPath)) return;
 
     tray = new Tray(iconPath);
-    tray.setToolTip('Posnic');
+    tray.setToolTip('MuftGo Billing');
 
     const rebuild = () => {
       const branchItems = trayBranches.branches.length
@@ -3939,7 +3977,7 @@ function createTray() {
 
       tray.setContextMenu(Menu.buildFromTemplate([
         {
-          label: 'Open Posnic',
+          label: 'Open MuftGo Billing',
           click: () => { global.__posnicStartHidden = false; if (mainWindow) { mainWindow.show(); mainWindow.focus(); } }
         },
         { type: 'separator' },
@@ -3957,7 +3995,7 @@ function createTray() {
           { label: 'Backup Manager', click: () => openBackupManager() }
         ]),
         { label: 'Software Update', click: () => openUpdateManager() },
-        { label: 'Posnic Cloud...', click: () => openCloudManager() },
+        { label: 'Cloud Sync...', click: () => openCloudManager() },
         { type: 'separator' },
         {
           label: 'Restart App',
@@ -3966,7 +4004,7 @@ function createTray() {
              at the end of it on the quit path that actually honours it. */
           click: () => { relaunchAfterQuit = true; app.quit(); }
         },
-        { label: 'Quit Posnic', click: () => app.quit() }
+        { label: 'Quit MuftGo Billing', click: () => app.quit() }
       ]));
     };
     rebuild();
