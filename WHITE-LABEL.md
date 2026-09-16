@@ -79,9 +79,14 @@ PDF/XPS writer as the Windows default on the till.
 ## Sample data for the Janata Vasahat clothing shop
 
 - `api/utils/demoData.js` → `textile` pack replaced with a dedicated
-  Janata Vasahat clothing catalogue (~48 products, 7 categories, Pune
-  price points, MRP + cost, GST-friendly HSN hints in descriptions).
-- Pick **Clothing & textiles** at install / demo-data reset.
+  Janata Vasahat clothing catalogue (42 products, 9 categories: shirts,
+  jeans, t-shirts, track pants & joggers, kurtis & tops, women's jeans &
+  sarees, kids wear, winter & festive, accessories & services; Pune price
+  points, MRP + cost, GST-friendly HSN hints in descriptions, a picture for
+  every product - 4 photos + 35 original MuftGo icons).
+- MuftGo Billing installs **clothing retail only**: setup offers no other
+  trade, and clothing installs always seed this local catalogue (never the
+  website datasets, which carry other trades' data).
 - Details: `docs/MUFTGO-SAMPLE-DATA.md`.
 
 ## Your AGPL duties when you give this to the client
