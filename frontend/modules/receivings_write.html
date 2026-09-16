@@ -76,7 +76,7 @@
                                 <div class="chat-list">
                                     <div class="chat-search">
                                         <div class="input-group">
-                                            <input type="search" class="form-control osk-trigger" placeholder="Find item name,sku or barcode" data-t-placeholder="lang_find_item_name_sku_or_barcode" name="receiving_add_item_name" id="receiving_add_item_name" aria-label="Search" data-t-aria-label="lang_search" aria-describedby="button-addon3">
+                                            <input type="search" class="form-control osk-trigger" placeholder="Type design name - pick each size as its own line" data-t-placeholder="lang_find_item_name_sku_or_barcode" name="receiving_add_item_name" id="receiving_add_item_name" aria-label="Search" data-t-aria-label="lang_search" aria-describedby="button-addon3">
                                             <div class="input-group-append">
                                                 <span class="btn" id="button-addon3"><i class="feather icon-search"></i></span>
                                             </div>
@@ -92,6 +92,12 @@
                                             <a href="javascript:void(0)" onclick="PosnicPro.receivings.autofillFromSupplier(true);">
                                                 <lang class="lang_autofill_low">low-stock items</lang>
                                             </a>
+                                        </small>
+                                        <!-- Clothing shops: every size is its own stock row, so one
+                                             "shirt" becomes four lines below - M, L, XL, XXL - each
+                                             with its own quantity and its own barcode. -->
+                                        <small class="text-muted d-block mt-1">
+                                            <lang class="lang_sizes_hint">Sizes are separate lines: type "shirt" and add M, L, XL… one by one.</lang>
                                         </small>
                                     </div>
                                 </div>
@@ -295,6 +301,8 @@
                                     <div class="cart-footer text-center">                                        
                                         <button type="button" class="btn btn-outline-secondary my-1" id="clearReceiving" onclick="return PosnicPro.resetForm('receiving');" style="display: none;"><i class="feather icon-refresh-ccw mr-2"></i><lang class="lang_clear_title"> Clear</lang>                                           
                                         </button>  
+                                        <button type="button" class="btn btn-outline-secondary my-1" onclick="return PosnicPro.receivings.printStickers();"><i class="feather icon-tag mr-2"></i><lang class="lang_print_stickers"> Print stickers</lang>
+                                        </button>
                                         <a href='#/purchaseorders' class="btn btn-outline-danger my-1"><i class="feather icon-x-circle mr-2"></i><lang class="lang_close_title"> Close</lang></a>
                                         <button type="submit" id="receiving_submit" name="receiving_submit" class="btn btn-outline-primary my-1"><i class="feather icon-save mr-2"></i><span id="returnn_button" class="changeReceivingText"><lang class="lang_save_title"> Save</lang></span>
                                         </button>

@@ -533,6 +533,78 @@ PosnicPro.receivings = {
         PosnicPro.receivings.invoiceTotalCheck();
     },
     /*
+     * Stickers for the lines on this screen: one label per piece, so a
+     * 59-piece delivery becomes 59 stickers in one print - M-8, L-7, XL-5
+     * and so on, each size carrying its own barcode. Same sheet technique
+     * as the order screen's Print labels; lines without a barcode are
+     * skipped and counted honestly instead of printing blanks. Capped at
+     * 500 labels so a typo in a quantity cannot hang the browser.
+     *
+     * Runs BEFORE Save too: the rows already carry names, quantities and
+     * barcodes, so stickers can print while the supplier waits and the
+     * entry is saved after. Never offered on a supplier return - returns
+     * take stickers off pieces, they never need new ones.
+     */
+    printStickers: function () {
+        if (PosnicPro.receivings.receivingReturnAction === 'return') {
+            PosnicPro.alert('info', PosnicPro.i18n.t('lang_stickers_not_for_returns', 'Stickers print from a purchase entry, not from a return.'));
+            return false;
+        }
+        if (typeof $.fn.JsBarcode !== 'function' && typeof $.fn.jsbarcode !== 'function') {
+            PosnicPro.alert('error', PosnicPro.i18n.t('lang_barcode_printer_not_ready', 'The barcode printer is not ready - reload the page and try again.'));
+            return false;
+        }
+        var labels = [];
+        var skipped = 0;
+        $('#receiving_print tbody tr[id^="receiving_row_"]').each(function () {
+            var rowId = String($(this).attr('id') || '').replace('receiving_row_', '');
+            if (!rowId) return;
+            var name = $('#addReceivingLineItemName_' + rowId).text().trim();
+            var code = $('#addReceivingBarcodeId_' + rowId).text().trim();
+            var qty = Math.max(1, Math.round(Number($('#addReceivingLineItemQty_' + rowId).val()) || 1));
+            if (!name) return;
+            if (!code || code === 'undefined' || code === 'null') { skipped += 1; return; }
+            for (var c = 0; c < qty && labels.length < 500; c++) {
+                labels.push({ name: name, code: code });
+            }
+        });
+        if (!labels.length) {
+            PosnicPro.alert('warning', PosnicPro.i18n.t(skipped ? 'lang_lines_have_no_barcode' : 'lang_no_lines_to_print',
+                skipped ? skipped + ' line(s) have no barcode yet - save the item with its barcode first.' : 'Add lines first, then print stickers.'));
+            return false;
+        }
+        var barcodeFn = ($.fn.JsBarcode === 'function') ? 'JsBarcode' : 'jsbarcode';
+        var svgByCode = {};
+        var $work = $('<div style="position:absolute;left:-9999px;top:0;"></div>').appendTo('body');
+        Object.keys(labels.reduce(function (acc, l) { acc[l.code] = 1; return acc; }, {})).forEach(function (code) {
+            var $svg = $('<svg></svg>').appendTo($work);
+            try {
+                $svg[barcodeFn](code, { format: 'CODE128', height: 40, width: 1.6, fontSize: 12, margin: 4, displayValue: true });
+                svgByCode[code] = $work.children().last().prop('outerHTML');
+            } catch (e) { svgByCode[code] = ''; }
+        });
+        $work.remove();
+        var cells = labels.map(function (l) {
+            return '<div class="lbl"><div class="lbl-name">' + $('<span>').text(l.name).html() + '</div>' + (svgByCode[l.code] || '') + '</div>';
+        }).join('');
+        var w = window.open('', '_blank');
+        if (!w) { PosnicPro.alert('error', PosnicPro.i18n.t('lang_allow_pop_ups_to_print_labels', 'Allow pop-ups to print labels')); return false; }
+        w.document.write('<html><head><title>Stickers</title><style>' +
+            'body{margin:0;font-family:sans-serif;}' +
+            '.sheet{display:flex;flex-wrap:wrap;}' +
+            '.lbl{width:38mm;padding:2mm;border:1px dotted #ccc;text-align:center;page-break-inside:avoid;}' +
+            '.lbl-name{font-size:9px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}' +
+            'svg{max-width:100%;}' +
+            '@media print{.lbl{border:none;}}' +
+            '</style></head><body><div class="sheet">' + cells + '</div></body></html>');
+        w.document.close();
+        setTimeout(function () { w.print(); }, 400);
+        if (skipped > 0) {
+            PosnicPro.alert('info', skipped + ' line(s) had no barcode and were skipped');
+        }
+        return false;
+    },
+    /*
      * P2: the declared invoice total against what the lines add up to.
      * A mismatch WARNS - the goods are already in the shop; the badge makes
      * somebody look, the save never refuses (owner's ruling).

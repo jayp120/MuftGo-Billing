@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MuftGo Billing - Shopkeeper's Guide (Clothing Shop)</title>
+    <style>
+      :root {
+        --ink: #111827;
+        --mut: #4b5563;
+        --line: #e5e7eb;
+        --wash: #f9fafb;
+        --amber: #fff8e1;
+        --amberline: #e0c36a;
+        --green: #047857;
+      }
+      body {
+        font:
+          16px/1.65 system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+        color: var(--ink);
+        margin: 0;
+        padding: 0 1rem 4rem;
+      }
+      main {
+        max-width: 44rem;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 1.7rem;
+        margin: 1.5rem 0 0.25rem;
+      }
+      h2 {
+        font-size: 1.25rem;
+        margin: 2.2rem 0 0.5rem;
+        padding-top: 1rem;
+        border-top: 2px solid var(--line);
+      }
+      h3 {
+        font-size: 1.05rem;
+        margin: 1.4rem 0 0.3rem;
+      }
+      p,
+      li {
+        color: var(--ink);
+      }
+      p.sub {
+        color: var(--mut);
+        margin-top: 0;
+      }
+      .scene {
+        background: var(--wash);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 0.9rem 1.1rem;
+        margin: 0.8rem 0;
+      }
+      .scene b.who {
+        display: block;
+        margin-bottom: 0.2rem;
+      }
+      .tip {
+        background: var(--amber);
+        border: 1px solid var(--amberline);
+        border-radius: 10px;
+        padding: 0.8rem 1.1rem;
+        margin: 0.8rem 0;
+      }
+      .rule {
+        background: #fef2f2;
+        border: 1px solid #f3b4b4;
+        border-radius: 10px;
+        padding: 0.8rem 1.1rem;
+        margin: 0.8rem 0;
+      }
+      .ok {
+        background: #ecfdf5;
+        border: 1px solid #6ee7b7;
+        border-radius: 10px;
+        padding: 0.8rem 1.1rem;
+        margin: 0.8rem 0;
+      }
+      code {
+        background: #f3f4f6;
+        padding: 0.1rem 0.35rem;
+        border-radius: 5px;
+        font-size: 0.92em;
+      }
+      ol.steps > li,
+      ul > li {
+        margin: 0.35rem 0;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 0.8rem 0;
+        font-size: 0.95rem;
+      }
+      th,
+      td {
+        border: 1px solid var(--line);
+        padding: 0.45rem 0.6rem;
+        text-align: left;
+      }
+      th {
+        background: var(--wash);
+      }
+      .toc {
+        background: var(--wash);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 0.8rem 1.2rem;
+      }
+      .toc ol {
+        margin: 0.3rem 0;
+        padding-left: 1.3rem;
+      }
+      .printbtn {
+        display: inline-block;
+        margin: 1rem 0;
+        padding: 0.7rem 1.4rem;
+        font-size: 1rem;
+        font-weight: 700;
+        border: 0;
+        border-radius: 8px;
+        background: #111827;
+        color: #fff;
+        cursor: pointer;
+      }
+      footer {
+        color: var(--mut);
+        font-size: 0.85rem;
+        margin-top: 2.5rem;
+      }
+      @media print {
+        .noprint {
+          display: none;
+        }
+        body {
+          padding: 0;
+          font-size: 12pt;
+        }
+        main {
+          max-width: none;
+        }
+        h2 {
+          break-after: avoid;
+        }
+        .scene,
+        .tip,
+        .rule,
+        .ok,
+        table {
+          break-inside: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Shopkeeper's Guide - Clothing Billing with Barcode Scanning</h1>
+      <p class="sub">
+        For the owner and staff of a garment shop. Read once, keep by the till.
+        Every example below uses a real day in a real kind of shop: shirts,
+        jeans and t-shirts in many sizes.
+      </p>
+      <p class="noprint">
+        <button class="printbtn" onclick="window.print()">
+          Print / Save as PDF
+        </button>
+      </p>
+
+      <div class="toc noprint">
+        <strong>Contents</strong>
+        <ol>
+          <li><a href="#s1">What you need (one-time)</a></li>
+          <li><a href="#s2">First start: Muftgo activation key</a></li>
+          <li><a href="#s3">How scanning works: USB gun, camera, phone</a></li>
+          <li>
+            <a href="#s4">Shirts, jeans, t-shirts: one barcode per size</a>
+          </li>
+          <li>
+            <a href="#s5">Morning delivery: purchase entry + bulk barcodes</a>
+          </li>
+          <li><a href="#s6">Bulk sticker printing on A4 + tagging</a></li>
+          <li><a href="#s7">Selling: scan, bill, remove the sticker</a></li>
+          <li><a href="#s8">Next batch: how new numbers are born</a></li>
+          <li>
+            <a href="#s9"
+              >Bills and printers: thermal over USB + those .prn files</a
+            >
+          </li>
+          <li>
+            <a href="#s10">Size exchange and return - no sticker needed</a>
+          </li>
+          <li><a href="#s11">Evening: day close in 5 minutes</a></li>
+          <li><a href="#s12">When something goes wrong</a></li>
+          <li><a href="#s13">Three things you must never do</a></li>
+        </ol>
+      </div>
+
+      <h2 id="s1">1. What you need (one-time)</h2>
+      <p>
+        Meet Ramesh, who owns <b>Fashion Point</b>, a shirt-jeans-t-shirt shop.
+        His dealer installed the billing app on the shop computer. This is all
+        the shop needed:
+      </p>
+      <table>
+        <tr>
+          <th>Thing</th>
+          <th>What exactly</th>
+          <th>Why</th>
+        </tr>
+        <tr>
+          <td>Computer</td>
+          <td>Windows 10 or 11, 64-bit, 4 GB memory, 2 GB free disk</td>
+          <td>
+            Runs the till + its own database. No server, no internet needed
+            after setup.
+          </td>
+        </tr>
+        <tr>
+          <td>Barcode scanner</td>
+          <td>
+            Any USB "1D" scanner, about Rs. 1,500. Must be
+            <b>keyboard mode (HID)</b> - the default on cheap scanners.
+          </td>
+          <td>Scans price tags. It behaves like a very fast typist.</td>
+        </tr>
+        <tr>
+          <td>Printers (two jobs)</td>
+          <td>
+            An A4/sticker printer for <b>price-tag stickers</b>; an 80 mm
+            thermal printer (USB) for <b>customer bills</b>.
+          </td>
+          <td>
+            Tags for garments, bills for customers. Two different printers, set
+            once in Hardware Manager.
+          </td>
+        </tr>
+        <tr>
+          <td>Muftgo key</td>
+          <td>
+            A secret the <b>Muftgo team</b> types on the shop computer once,
+            never given to staff in writing.
+          </td>
+          <td>
+            Without it the app never opens - so a copied installer is useless to
+            anyone else.
+          </td>
+        </tr>
+      </table>
+      <div class="tip">
+        <b>Internet?</b> Only needed once, during installation. After that the
+        shop runs fully offline. Billing never stops because the Wi-Fi did.
+      </div>
+
+      <h2 id="s2">2. First start: Muftgo activation key</h2>
+      <ol class="steps">
+        <li>
+          Double-click the billing app. The first screen says
+          <b>Activate MuftGo Billing</b>.
+        </li>
+        <li>
+          Call the Muftgo team. They type the team key on this computer once and
+          press <b>Activate</b>.
+        </li>
+        <li>
+          Done - once per computer, forever. The login page appears. Shop staff
+          never see or handle this key.
+        </li>
+      </ol>
+      <div class="scene">
+        <b class="who">Real life:</b> Ramesh's nephew copies the app to his home
+        laptop "to practise". It opens on the activation screen and stops there
+        - only the Muftgo team has the key. The shop's data never leaves the
+        shop.
+      </div>
+      <div class="tip">
+        <b>New computer?</b> Shifting to a new PC? Install there and call the
+        Muftgo team once - they activate the new PC. The old PC keeps working.
+        If the key is ever leaked, the Muftgo team rebuilds the installer with a
+        fresh key.
+      </div>
+
+      <h2 id="s3">3. How scanning works: USB gun, camera, phone</h2>
+      <p>
+        Three ways a tag reaches the bill. All three land in the same place -
+        the sale screen's <b>Find item name, sku or barcode</b> box - so they
+        can never disagree.
+      </p>
+      <table>
+        <tr>
+          <th>Method</th>
+          <th>How</th>
+          <th>When to use</th>
+        </tr>
+        <tr>
+          <td><b>USB scanner gun (main)</b></td>
+          <td>
+            Plug into USB, point 10-15 cm at the tag, press the button. It types
+            the number + Enter by itself.
+          </td>
+          <td>
+            Everyday billing. Fastest: beep-beep-beep, one beep per piece.
+          </td>
+        </tr>
+        <tr>
+          <td><b>Camera button (backup)</b></td>
+          <td>
+            On the sale screen press the <b>camera icon</b>, point the till
+            webcam at the tag. Works offline (Chrome/Edge or the app window) -
+            reads the barcode or the QR.
+          </td>
+          <td>
+            Gun battery dead, gun forgotten at home, one tag torn and faint.
+          </td>
+        </tr>
+        <tr>
+          <td><b>Type the number (backup)</b></td>
+          <td>
+            Type the 6-digit number printed under the barcode, press Enter.
+          </td>
+          <td>Tag too damaged to scan at all.</td>
+        </tr>
+      </table>
+      <div class="scene">
+        <b class="who">And the phone?</b> Every price tag carries
+        <b>two codes with the same number</b>: a barcode (for the Rs. 1,500 gun)
+        and a QR (for any phone camera). So a phone CAN read any tag - open the
+        phone camera, point, see the number. But the phone does not push the
+        scan into the till screen by itself. The supported phone paths are: (1)
+        a phone app that acts as a <b>Bluetooth scanner</b> (the till sees it as
+        a keyboard, same as the gun), or (2) handset ordering where given. For
+        counter billing, keep the USB gun in hand - it is ten times faster than
+        any camera.
+      </div>
+      <div class="tip">
+        <b>Gun test (30 seconds, do once):</b> open Notepad, scan any tag. The
+        number must appear AND the cursor must jump to the next line. If the
+        cursor stays on the same line, the gun's "Enter suffix" is off - turn it
+        on from the gun's manual (it is called "suffix" or "terminator").
+        Without it, scans pile up in the box and nothing lands on the bill.
+      </div>
+
+      <h2 id="s4">4. Shirts, jeans, t-shirts: one barcode per size</h2>
+      <p>
+        A shirt is not one product - it is <b>one design in many sizes</b>. The
+        app keeps each size as its own item with its <b>own barcode</b>, so
+        scanning an XL can never deduct an M from stock.
+      </p>
+      <p>
+        Ramesh's shelf looks like this - 3 designs, 12 size-items, 12 barcodes:
+      </p>
+      <table>
+        <tr>
+          <th>Design (one family)</th>
+          <th>Sizes = items</th>
+          <th>Barcodes (auto-given)</th>
+        </tr>
+        <tr>
+          <td>Men Formal Shirt - Blue Checks</td>
+          <td>M, L, XL, XXL (4 items)</td>
+          <td>200031, 200032, 200033, 200034</td>
+        </tr>
+        <tr>
+          <td>Slim Jeans - Dark Blue</td>
+          <td>28, 30, 32, 34 (4 items)</td>
+          <td>200035, 200036, 200037, 200038</td>
+        </tr>
+        <tr>
+          <td>Round-Neck T-shirt - Black</td>
+          <td>S, M, L, XL (4 items)</td>
+          <td>200039, 200040, 200041, 200042</td>
+        </tr>
+      </table>
+      <div class="rule">
+        <b>Golden rule of garments:</b> one barcode per size per colour. "Blue
+        shirt" is not a product - "Blue shirt, XL" is. If two piles share one
+        barcode, the computer cannot tell which pile sold.
+      </div>
+      <p>
+        To make a family: <b>Add &gt; Item</b>, name the design, tick
+        <b>This item has variants</b>, option <b>Size</b> with values (e.g.
+        <code>M, L, XL, XXL</code>), Save. The app makes one item per size, each
+        with its own barcode number. Same for jeans (28, 30, 32, 34) and
+        t-shirts (S, M, L, XL) - and repeat per colour: "Black" and "White" of
+        one t-shirt are two families.
+      </p>
+
+      <h2 id="s5">5. Morning delivery: purchase entry + bulk barcodes</h2>
+      <p>
+        9:30 am. <b>Ravi Textiles</b> delivers against bill <b>RT-1042</b>: 20
+        formal shirts (M-8, L-7, XL-5), 15 jeans (28-4, 30-5, 32-4, 34-2), 24
+        black t-shirts (S-6, M-8, L-6, XL-4). Priya at the counter does this -
+        total about 15 minutes:
+      </p>
+      <ol class="steps">
+        <li>
+          Open <b>Purchase (left menu) &gt; New Purchase</b>. Choose supplier
+          <b>Ravi Textiles</b>, type bill number <b>RT-1042</b>.
+        </li>
+        <li>
+          Click the <b>Find item</b> box and type <b>shirt</b>. Every size
+          appears as its <b>own line</b> - <i>Shirt / M</i>, <i>Shirt / L</i>,
+          <i>Shirt / XL</i>… There is no separate "variants" box here: sizes ARE
+          items. Add each line and set its quantity (M-8, L-7, XL-5) and cost
+          price from the bill. Same for jeans sizes and t-shirt sizes.
+        </li>
+        <li>
+          <b>New design not in the list?</b> The search shows a
+          <b>create</b> row for the typed name - or click <b>Add &gt; Item</b>,
+          type name (e.g. <i>Men Linen Shirt - Green</i>), price, MRP, quantity,
+          ticking <b>This item has variants</b> with <b>Size</b> values if it
+          has sizes. <b>Leave the barcode box empty.</b> The app gives it the
+          next free number itself (…200043, 200044…). Save, then add it to the
+          purchase.
+        </li>
+        <li>Press <b>Save</b>. Stock is now in the computer, size by size.</li>
+      </ol>
+      <div class="ok">
+        <b>Bulk, no typing:</b> leaving barcodes blank across 40 new size-items
+        gives 40 fresh numbers in one save - next-free after the highest in use,
+        skipping anything already taken, never giving one number twice. That is
+        the whole "bulk barcode generation": blank means "next free number,
+        please".
+      </div>
+
+      <h2 id="s6">6. Bulk sticker printing on A4 + tagging</h2>
+      <p>
+        The 59 pieces need 59 stickers before lunch.
+        <b>Fastest way - one button for the whole delivery:</b>
+      </p>
+      <ol class="steps">
+        <li>
+          On the purchase screen, with all lines and quantities entered, press
+          <b>Print stickers</b> (bottom bar, next to Save).
+        </li>
+        <li>
+          The app prints <b>one sticker per piece automatically</b> - M-8
+          stickers, L-7, XL-5, jeans 28-4… each size carrying its own barcode -
+          tiled on A4 sheets. Works before Saving too, so stickers print while
+          the supplier waits.
+        </li>
+        <li>
+          Lines with no barcode yet are skipped and counted on screen ("2
+          line(s) had no barcode") - save those items with their barcodes, then
+          print again.
+        </li>
+      </ol>
+      <p>
+        <b>Single-size top-up</b> (7 more L stickers later): open <b>Items</b>,
+        click the size-item, press <b>Barcode labels</b>, set
+        <b>Number of stickers = 7</b>, Print. One sticker = single label; more =
+        full A4 sheet. (Ordering through Purchase Orders instead? Open the order
+        &gt; <b>Print labels</b> does the same per ordered quantity.)
+      </p>
+      <p>
+        Every sticker shows shop name, price, MRP, the <b>barcode</b> and the
+        <b>QR</b> - both carry the same number. Print to the
+        <b>sticker/A4 printer</b> - never a PDF or XPS writer.
+      </p>
+      <div class="scene">
+        <b class="who">Tagging:</b> stick one label per piece: inside collar
+        (shirts/t-shirts), inside waistband (jeans), saree fall edge -
+        <b>same spot every time</b>, so hands find it blind at sale.
+      </div>
+      <div class="scene">
+        <b class="who">Counting right:</b> 59 pieces = 59 scans at tagging time
+        is wrong thinking - tagging prints per size (7 copies of L, 8 of M…). At
+        SALE time, scan each piece: 5 identical socks = 5 scans, not "scan once,
+        type 5". The stock stays honest only if every piece beeps.
+      </div>
+
+      <h2 id="s7">7. Selling: scan, bill, remove the sticker</h2>
+      <p>6 pm rush. A customer brings 3 shirts and 1 jeans to the counter.</p>
+      <ol class="steps">
+        <li>
+          Open <b>New Sale</b> (left menu &gt; Home &gt; New Sale). Click the
+          <b>Find item name, sku or barcode</b> box once.
+        </li>
+        <li>
+          Hold each garment's tag 10-15 cm under the scanner and press its
+          button - <b>beep, next</b>. Four beeps, four lines on the bill. Each
+          beep also reduces stock by one.
+        </li>
+        <li>
+          No gun in hand? Type the 6-digit number + Enter, or press the
+          <b>camera icon</b> and point the webcam at the tag.
+        </li>
+        <li>
+          Take cash/UPI, press <b>Charge / Save</b>, hand the printed bill.
+        </li>
+        <li>
+          <b>Peel the price sticker off</b> and hand over the garment. The
+          sticker has done its job - the sale is in the computer now. (Keep a
+          small bin at the counter for peeled stickers; never stick a peeled
+          sticker on another piece.)
+        </li>
+      </ol>
+
+      <h2 id="s8">8. Next batch: how new numbers are born</h2>
+      <p>
+        Next week Ravi Textiles sends a new design:
+        <i>Men Casual Shirt - Red Stripes</i> (M, L, XL). Priya clicks
+        <b>Add &gt; Item</b> with variants, <b>leaves barcodes blank</b>, saves.
+        The app continues above the highest number in use (…200043, 200044,
+        200045) - it never reuses an old number and never fills gaps left by
+        deleted items.
+      </p>
+      <div class="rule">
+        <b>Never reuse a barcode number</b> for a new design, and never type
+        200001-style numbers as quick-sale shortcut codes. Old tags live on in
+        old wardrobes; a recycled number sells yesterday's shirt today. New
+        batch = blank boxes = fresh numbers, always.
+      </div>
+
+      <h2 id="s9">
+        9. Bills and printers: thermal over USB + those .prn files
+      </h2>
+      <p>
+        <b
+          >Those <code>Receipt #S-BWJQ-000015.prn</code> files (1 KB) are NOT
+          printed bills.</b
+        >
+        A <code>.prn</code> file is the raw printer data saved to disk instead
+        of paper - the bill went to a file-writer, not to the thermal printer.
+        Nothing reached paper.
+      </p>
+      <p>
+        Why it happens: the bill was sent to a <b>virtual printer</b> (<i
+          >Microsoft Print to PDF, XPS Document Writer, OneNote, Fax</i
+        >) or <b>"Print to file"</b> was ticked, or the Windows default is a
+        virtual printer and the app fell back to it. The save dialog then
+        defaults to OneDrive Documents, hangs, and errors - which is exactly the
+        symptom this build guards against.
+      </p>
+      <div class="ok">
+        <b
+          >Yes - with the USB thermal connected properly, printing succeeds
+          silently:</b
+        >
+        no dialog, no file, paper comes out. Checklist, once:
+        <ol class="steps">
+          <li>
+            Connect the 80 mm thermal via USB, install the vendor's driver,
+            print a Windows test page.
+          </li>
+          <li>
+            In the app open <b>Hardware Manager</b>:
+            <b>Receipt Printer = your thermal (80/58mm)</b>,
+            <b>Report Printer = your A4 printer</b>.
+          </li>
+          <li>
+            In Windows Settings, do NOT leave <i>Print to PDF / XPS / Fax</i> as
+            the default - make the thermal the default.
+          </li>
+          <li>Untick <b>Print to file</b> anywhere you see it.</li>
+          <li>
+            Reprint the stuck bills from <b>Sales History</b> - they will now
+            come on paper. Delete the old <code>.prn</code> files; they were
+            never bills.
+          </li>
+        </ol>
+      </div>
+
+      <h2 id="s10">10. Size exchange and return - no sticker needed</h2>
+      <p>
+        Next day the customer returns: the L shirt is tight, he wants XL.
+        <b
+          >The price sticker was peeled off at sale and thrown away - that is
+          correct, and no rescan is needed.</b
+        >
+        The return works from the bill, not from the tag:
+      </p>
+      <ol class="steps">
+        <li>
+          Open <b>Sales History</b>, find yesterday's bill (by bill number,
+          date, or customer phone).
+        </li>
+        <li>
+          Open it with the <b>Return</b> action. Every line of that bill loads
+          on screen - L shirt, jeans, everything.
+        </li>
+        <li>
+          Set the return quantity on the <b>L shirt line</b> (stock goes back up
+          by one), then add the <b>XL shirt</b> as a new sale line - scan a
+          fresh XL tag from the shelf, or pick it by name (stock goes down by
+          one).
+        </li>
+        <li>
+          If XL costs more, collect the difference; if less, refund it. The bill
+          shows both lines, so the accounts stay honest.
+        </li>
+      </ol>
+      <div class="tip">
+        <b>Thrown sticker?</b> Never a problem. Only the exchange item coming
+        FROM the shelf needs its tag scanned. The item going BACK needs only its
+        bill line.
+      </div>
+
+      <h2 id="s11">11. Evening: day close in 5 minutes</h2>
+      <ol class="steps">
+        <li>
+          <b>Sales History</b> - today's total, bill count. Match cash in drawer
+          + UPI credits.
+        </li>
+        <li>
+          <b>Items &gt; low stock</b> - anything at zero (e.g. Jeans-32 sold
+          out) goes on tomorrow's order list to Ravi Textiles.
+        </li>
+        <li>
+          Close the app. The computer can switch off - everything is stored
+          inside it, with automatic backups if enabled.
+        </li>
+      </ol>
+
+      <h2 id="s12">12. When something goes wrong</h2>
+      <table>
+        <tr>
+          <th>Symptom</th>
+          <th>Fix (try in order)</th>
+        </tr>
+        <tr>
+          <td>
+            Pressing Print saves a <code>.prn</code> file instead of paper
+          </td>
+          <td>
+            Not a success - see §9. Set the thermal as Receipt Printer in
+            Hardware Manager, take PDF/XPS off Windows-default, untick
+            Print-to-file, reprint from Sales History.
+          </td>
+        </tr>
+        <tr>
+          <td>Print dialog opens, loads OneDrive, then errors</td>
+          <td>
+            A virtual printer (PDF/XPS/OneNote/Fax) is the default. Same fix as
+            §9.
+          </td>
+        </tr>
+        <tr>
+          <td>Scanner types numbers but item never lands on the bill</td>
+          <td>
+            1. Scan into Notepad - if the cursor stays on the same line, enable
+            the Enter suffix in the scanner manual. 2. Click the sale's item box
+            once (the scan goes wherever the cursor is).
+          </td>
+        </tr>
+        <tr>
+          <td>No camera icon on the sale screen</td>
+          <td>
+            Open the shop in Chrome or Edge while the app runs. Firefox/Safari
+            cannot camera-scan - use the USB scanner there.
+          </td>
+        </tr>
+        <tr>
+          <td>Scanning adds the WRONG item</td>
+          <td>
+            Two products share one number. Open each, give one a fresh number
+            (or leave blank and save - auto-numbering picks a free one), reprint
+            its tags.
+          </td>
+        </tr>
+        <tr>
+          <td>App asks for the Muftgo key again</td>
+          <td>
+            The data moved to a different computer (or Windows was reinstalled).
+            Call the Muftgo team once - normal and expected.
+          </td>
+        </tr>
+        <tr>
+          <td>App shows blank / database won't start on a brand-new PC</td>
+          <td>
+            Install <b>Microsoft Visual C++ Redistributable (x64)</b> from
+            microsoft.com, then start the app again.
+          </td>
+        </tr>
+        <tr>
+          <td>Forgotten shop login</td>
+          <td>
+            Call the dealer - they reset the cashier login on the shop PC in a
+            minute. The Muftgo activation key is separate and stays with the
+            Muftgo team.
+          </td>
+        </tr>
+      </table>
+
+      <h2 id="s13">13. Three things you must never do</h2>
+      <div class="rule">
+        <ol>
+          <li>
+            <b>Never ask for or keep the Muftgo key</b> - it belongs to the
+            Muftgo team, not the shop. Cashiers get their own login (Users
+            menu).
+          </li>
+          <li>
+            <b>Never reuse a barcode number</b> for a new design, and never type
+            200001-style numbers as quick-sale shortcut codes. Old tags live on
+            in old wardrobes; a recycled number sells yesterday's shirt today.
+          </li>
+          <li>
+            <b>Never delete a product that has sales.</b> Out-of-fashion? Set
+            its stock to zero and stop ordering it. History must keep pointing
+            at it.
+          </li>
+        </ol>
+      </div>
+
+      <footer>
+        MuftGo Billing - clothing shop guide. Keep this page by the till. To
+        reprint: open this file in any browser &gt; Print &gt; Save as PDF.
+      </footer>
+    </main>
+  </body>
+</html>

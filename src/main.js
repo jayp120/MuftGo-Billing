@@ -2111,7 +2111,8 @@ function createWindow(showStartupLoader = !isWarmStartup()) {
   });
 
   /*
-   * Deny every permission, and every navigation away from our own pages.
+   * Deny every permission by default, and every navigation away from our own
+   * pages.
    *
    * Neither of these existed. Electron's default is to hand a permission
    * request straight to Chromium's own logic, which for a desktop application
@@ -2119,8 +2120,10 @@ function createWindow(showStartupLoader = !isWarmStartup()) {
    * notifications or clipboard-read and get them - and the pages loaded here
    * include a legacy frontend served with 'unsafe-eval' in its CSP.
    *
-   * A point of sale needs none of them. Printing goes through IPC to the main
-   * process; it is not a browser permission.
+   * A point of sale needs almost none of them. Printing goes through IPC to
+   * the main process; it is not a browser permission. The one exception is
+   * the front camera for barcode/QR scanning on tills with no scanner gun:
+   * that is granted below, and only to our own local pages.
    */
   const ALLOWED_PERMISSIONS = new Set([
     /* Fullscreen: the customer display uses it, and it grants no access to
@@ -2135,24 +2138,67 @@ function createWindow(showStartupLoader = !isWarmStartup()) {
     'pointerLock',
   ]);
 
+  /* Camera for scanning, and nothing else with a sensor in it. Electron asks
+     for camera/microphone/speakers as a single 'media' permission, so this
+     set is the permission name, not the device. */
+  const CAMERA_PERMISSIONS = new Set(['media', 'camera']);
+
   /*
-   * What is deliberately NOT on that list: camera, microphone, geolocation,
-   * display-capture, serial, usb, hid, midi and idle-detection. A point of sale
-   * needs none of them, and the scale and printer are driven from the main
-   * process through IPC rather than through the Web Serial API - denying
-   * 'serial' here does not touch them.
+   * Our own pages live on loopback or file:. Anything else - including a page
+   * the till was navigated to by an injected script - must never get the
+   * camera, even if the permission name itself is allowed.
+   */
+  function isLocalCameraOrigin(candidate) {
+    if (!candidate) return false;
+    if (candidate === 'null' || candidate === 'file://') return true;
+    let parsed = null;
+    try { parsed = new URL(String(candidate)); } catch { return false; }
+    if (parsed.protocol === 'file:') return true;
+    if (parsed.protocol !== 'http:') return false;
+    return parsed.hostname === 'localhost' ||
+      parsed.hostname === '127.0.0.1' ||
+      parsed.hostname === '[::1]' ||
+      parsed.hostname === '::1';
+  }
+
+  /*
+   * What is deliberately NOT on either list: microphone-only, geolocation,
+   * display-capture, serial, usb, hid, midi and idle-detection. The scale and
+   * printer are driven from the main process through IPC rather than through
+   * the Web Serial API - denying 'serial' here does not touch them.
    *
    * Every refusal is logged with its name, so if some page turns out to need
    * one, it says so in app.log rather than failing silently.
    */
 
   mainWindow.webContents.session.setPermissionRequestHandler(
-    (webContents, permission, callback) => {
-      const allowed = ALLOWED_PERMISSIONS.has(permission);
-      if (!allowed) {
-        console.log(`[Security] denied permission request: ${permission}`);
+    (webContents, permission, callback, details) => {
+      if (ALLOWED_PERMISSIONS.has(permission)) {
+        callback(true);
+        return;
       }
-      callback(allowed);
+      if (CAMERA_PERMISSIONS.has(permission)) {
+        /* A till with no scanner gun scans with its front camera. The sales
+           page only ever asks for video, never audio - a pure-audio request
+           from anywhere is not scanning and stays denied. */
+        const mediaTypes = details && details.mediaTypes;
+        if (Array.isArray(mediaTypes) && !mediaTypes.includes('video')) {
+          console.log(`[Security] denied microphone-only request`);
+          callback(false);
+          return;
+        }
+        const requestingUrl = (details && details.requestingUrl) ||
+          (webContents && typeof webContents.getURL === 'function' && webContents.getURL());
+        if (isLocalCameraOrigin(requestingUrl)) {
+          callback(true);
+          return;
+        }
+        console.log(`[Security] denied camera request from remote origin: ${requestingUrl}`);
+        callback(false);
+        return;
+      }
+      console.log(`[Security] denied permission request: ${permission}`);
+      callback(false);
     }
   );
 
@@ -2160,7 +2206,18 @@ function createWindow(showStartupLoader = !isWarmStartup()) {
      requested, and a handler that only covers the asynchronous path leaves
      those at Chromium's default. */
   mainWindow.webContents.session.setPermissionCheckHandler(
-    (webContents, permission) => ALLOWED_PERMISSIONS.has(permission)
+    (webContents, permission, requestingOrigin, details) => {
+      if (ALLOWED_PERMISSIONS.has(permission)) return true;
+      if (CAMERA_PERMISSIONS.has(permission)) {
+        const mediaTypes = details && details.mediaTypes;
+        if (Array.isArray(mediaTypes) && !mediaTypes.includes('video')) return false;
+        const candidate = (details && details.requestingUrl) ||
+          requestingOrigin ||
+          (webContents && typeof webContents.getURL === 'function' && webContents.getURL());
+        return isLocalCameraOrigin(candidate);
+      }
+      return false;
+    }
   );
 
   /*
@@ -2349,6 +2406,45 @@ async function redirectToWizard() {
     console.log(`  - API Endpoint:  http://localhost:${apiPort()}/api`);
     console.log('Please complete the installation wizard to continue');
     console.log('=======================================================\n');
+  }
+}
+
+/*
+ * Shop activation screen: one Muftgo team key per till. The shop never sets
+ * this key - only the Muftgo team holds it (see api/src/utils/activation.js).
+ *
+ * Checked on every start before anything else is shown - a copied installer
+ * lands here instead of in the setup wizard or the login page. The screen
+ * itself is served by the API (GET /api/activation), so there is no new
+ * window code and no build step; this only decides whether to show it.
+ * The API enforces the same check per request, so the browser at :5555 is
+ * locked even if this window is bypassed.
+ */
+function requireActivationUtil() {
+  const activationPath = app.isPackaged
+    ? path.join(process.resourcesPath, 'api', 'src', 'utils', 'activation.js')
+    : path.join(__dirname, '..', 'api', 'src', 'utils', 'activation.js');
+  return require(activationPath);
+}
+
+function isTillActivated() {
+  try {
+    process.env.POSNIC_USERDATA = app.getPath('userData');
+    const activation = requireActivationUtil();
+    return activation.status().activated;
+  } catch (e) {
+    /* An unreadable activation store must fail closed, never open. */
+    console.warn('[activation] could not check activation status:', e.message);
+    return false;
+  }
+}
+
+async function redirectToActivation() {
+  if (mainWindow) {
+    await loadPageAndReveal(`http://localhost:${apiPort()}/api/activation`);
+    writeStartupPerformanceSummary('Activation');
+    markInterfaceReady('Activation');
+    console.log('Till is not activated - showing activation screen\n');
   }
 }
 
@@ -3595,7 +3691,10 @@ function confirmFullAccountRemoval() {
 // IPC handler for page navigation from install wizard
 ipcMain.on('load-page', (event, page) => {
   if (page === 'login' && mainWindow) {
-    redirectToLogin();
+    /* A fresh install finishes its wizard straight into the login page -
+       activation must stand in between, or new copies skip it entirely. */
+    if (!isTillActivated()) redirectToActivation();
+    else redirectToLogin();
   }
 });
 
@@ -4867,6 +4966,18 @@ function startServer() {
   process.env.KIOSK_API_KEY = localSecrets.kioskKey;
 
   /*
+   * Shop activation: one Muftgo team key per till (see
+   * api/src/utils/activation.js for the why and the limits).
+   *
+   * The API runs in this process, so these two variables are all it needs:
+   * enforcement on, and the directory holding .activation.json. The
+   * contributor dev-server sets neither, which is exactly why development
+   * and tests are never gated.
+   */
+  process.env.POSNIC_ENFORCE_ACTIVATION = '1';
+  process.env.POSNIC_USERDATA = app.getPath('userData');
+
+  /*
    * The PIN lock, tied to this machine.
    *
    * The install secret goes into the key derivation, so the encrypted session
@@ -5126,6 +5237,9 @@ function startServer() {
       if (result.needsWizard) {
         console.log('\n First time setup - showing installation wizard...\n');
         await redirectToWizard();
+      } else if (!isTillActivated()) {
+        console.log('\n Till is not activated - showing activation screen...\n');
+        await redirectToActivation();
       } else {
         updateStartupStatus('ready', 'Loading Interface...', 'Preparing login screen', 95);
         await redirectToLogin();

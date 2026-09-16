@@ -1396,8 +1396,13 @@ app.post(['/push/test', '/api/push/test'], sseProtect, async (req, res) => {
   }
 });
 
+// Shop activation: public screen + gate. Mounted before every API router so
+// an unactivated copy answers nothing except the activation screen itself.
+// Inert unless the packaged shell sets POSNIC_ENFORCE_ACTIVATION=1.
+app.use(['/activation', '/api/activation'], require('./src/routes/activation.routes'));
+
 // Mount API routes under /api
-app.use('/api', apiRouter);
+app.use('/api', require('./src/middleware/activation-gate').activationGate, apiRouter);
 
 // Root API endpoint - provides basic API info and prevents 404 on /api
 app.get('/api', (req, res) => {
@@ -1412,7 +1417,7 @@ app.get('/api', (req, res) => {
 });
 
 // Expose suppliers endpoints without the /api prefix for legacy clients
-app.use('/suppliers', suppliersRoutes);
+app.use('/suppliers', require('./src/middleware/activation-gate').activationGate, suppliersRoutes);
 
 // Serve frontend static files
 const frontendPath = path.join(__dirname, '..', 'frontend');
@@ -1589,7 +1594,7 @@ if (fs.existsSync(MENU_BUNDLE)) {
 }
 
 // Also mount API routes at root for backward compatibility
-app.use('/', apiRouter);
+app.use('/', require('./src/middleware/activation-gate').activationGate, apiRouter);
 
 // Handle 404 - Keep this as a last route
 app.use((req, res, next) => {

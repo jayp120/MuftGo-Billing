@@ -33,7 +33,7 @@ distribution rather than assigning one licence to the complete bundle. This
 notice records technical provenance and is not legal advice.
 
 If you would rather not receive it, the installer can be built without a bundled
-MongoDB and pointed at one you already run; see `download-mongodb.bat`  and
+MongoDB and pointed at one you already run; see `download-mongodb.bat` and
 `MONGODB_URI`.
 
 ## Node.js
@@ -104,6 +104,21 @@ cdnjs.cloudflare.com at run time, which meant the main application window
 executed a third party's script on every launch with no integrity check, and
 barcode printing did not work offline. It is vendored now, with its notice.
 
+## ZXing ("zebra crossing")
+
+**Shipped as:** `frontend/static/script/js/zxing.min.js`, copied by the
+frontend build into `frontend/public/script/lazy/zxing.js`
+**Version:** 0.23.0 (`@zxing/library`)
+**Copyright:** © ZXing authors
+**Licence:** Apache License 2.0 — header kept at the top of the vendored file
+**Upstream:** <https://github.com/zxing-js/library>
+
+Decodes barcodes and QR codes from the till camera where the platform ships
+no native detector (Windows desktop Chromium, including this app's own
+window, exposes none). Loaded lazily on first scan and only from our own
+origin, so scanning works offline and no third-party code is fetched at run
+time.
+
 ## Icon sets
 
 **Shipped as:** `frontend/static/style/icons/`
@@ -113,18 +128,18 @@ licence file, so the terms below were read from each project's published
 package rather than from the vendored copy. Several are governed by more than
 one licence — typically one for the code and another for the glyphs.
 
-| Set | Upstream |
-| --- | --- |
-| Dripicons | <https://github.com/amitjakhu/dripicons> |
-| Feather | <https://github.com/feathericons/feather> |
-| Font Awesome | <https://github.com/FortAwesome/Font-Awesome> |
-| Ionicons | <https://github.com/ionic-team/ionicons> |
-| Line Awesome | <https://github.com/icons8/line-awesome> |
-| Material Design Icons | <https://github.com/Templarian/MaterialDesign> |
-| Simple Line Icons | <https://github.com/thesabbir/simple-line-icons> |
-| Socicon | <https://www.socicon.com/> |
-| Themify Icons | <https://github.com/lykmapipo/themify-icons> |
-| Typicons | <https://github.com/stephenhutchings/typicons.font> |
+| Set                   | Upstream                                            |
+| --------------------- | --------------------------------------------------- |
+| Dripicons             | <https://github.com/amitjakhu/dripicons>            |
+| Feather               | <https://github.com/feathericons/feather>           |
+| Font Awesome          | <https://github.com/FortAwesome/Font-Awesome>       |
+| Ionicons              | <https://github.com/ionic-team/ionicons>            |
+| Line Awesome          | <https://github.com/icons8/line-awesome>            |
+| Material Design Icons | <https://github.com/Templarian/MaterialDesign>      |
+| Simple Line Icons     | <https://github.com/thesabbir/simple-line-icons>    |
+| Socicon               | <https://www.socicon.com/>                          |
+| Themify Icons         | <https://github.com/lykmapipo/themify-icons>        |
+| Typicons              | <https://github.com/stephenhutchings/typicons.font> |
 
 ### Licences
 
@@ -132,18 +147,18 @@ Taken from the published package for each project on 5 August 2026, using
 `npm view <package> license`, and for the two share-alike sets by unpacking the
 package and reading the licence file it carries. Not written from memory.
 
-| Set | Licence | Source |
-| --- | --- | --- |
-| Dripicons | **CC BY-SA 4.0** | `dripicons` |
-| Feather | MIT | `feather-icons` |
-| Font Awesome | OFL-1.1 (fonts) AND MIT (code) | `font-awesome`, and the header in the shipped CSS |
-| Ionicons | MIT | `ionicons` |
-| Line Awesome | OFL-1.1 (fonts) AND MIT (code) | `line-awesome`, and the header in the shipped CSS |
-| Material Design Icons | Apache-2.0 | `@mdi/font` |
-| Simple Line Icons | MIT | `simple-line-icons` |
-| Socicon | MIT | `socicon` |
-| Themify Icons | ISC | `themify-icons` |
-| Typicons | SIL OFL 1.1 (fonts) and CC BY-SA (artwork) | `typicons.font` |
+| Set                   | Licence                                    | Source                                            |
+| --------------------- | ------------------------------------------ | ------------------------------------------------- |
+| Dripicons             | **CC BY-SA 4.0**                           | `dripicons`                                       |
+| Feather               | MIT                                        | `feather-icons`                                   |
+| Font Awesome          | OFL-1.1 (fonts) AND MIT (code)             | `font-awesome`, and the header in the shipped CSS |
+| Ionicons              | MIT                                        | `ionicons`                                        |
+| Line Awesome          | OFL-1.1 (fonts) AND MIT (code)             | `line-awesome`, and the header in the shipped CSS |
+| Material Design Icons | Apache-2.0                                 | `@mdi/font`                                       |
+| Simple Line Icons     | MIT                                        | `simple-line-icons`                               |
+| Socicon               | MIT                                        | `socicon`                                         |
+| Themify Icons         | ISC                                        | `themify-icons`                                   |
+| Typicons              | SIL OFL 1.1 (fonts) and CC BY-SA (artwork) | `typicons.font`                                   |
 
 **What this does and does not establish.** These are the terms the upstream
 projects publish today. The copies bundled here were vendored at some earlier
@@ -184,9 +199,9 @@ language the app offers (in, us, lk, np, sa, fr, es, pt, id, th, de, tz, nl,
 it), and nothing else. The 238 other countries the stylesheet knows are not
 bundled.
 
-| Set | Licence | Source |
-| --- | --- | --- |
-| flag-icons (formerly flag-icon-css) | MIT | `flag-icons` 7.5.0, `npm view flag-icons license`, 2 September 2026 |
+| Set                                 | Licence | Source                                                              |
+| ----------------------------------- | ------- | ------------------------------------------------------------------- |
+| flag-icons (formerly flag-icon-css) | MIT     | `flag-icons` 7.5.0, `npm view flag-icons license`, 2 September 2026 |
 
 The eight added on 2 September 2026 and the four on 4 September (de, tz, nl,
 it) were copied unmodified from that package for the language menu; `in.svg` and `us.svg` were already here from the

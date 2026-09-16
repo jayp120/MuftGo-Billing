@@ -52,6 +52,9 @@
   "Account created successfully": [
     "src/models/install.model.js"
   ],
+  "Activation is not enabled on this server.": [
+    "src/routes/activation.routes.js"
+  ],
   "Active branch does not belong to the current license": [
     "src/repositories/item.repository.js"
   ],
@@ -1772,6 +1775,12 @@
   "Shift updated": [
     "src/repositories/shift.repository.js"
   ],
+  "Shops cannot change this key. Call the Muftgo team.": [
+    "src/routes/activation.routes.js"
+  ],
+  "Shops cannot set their own key. Call the Muftgo team to activate this till.": [
+    "src/routes/activation.routes.js"
+  ],
   "Something went wrong!": [
     "src/middleware/errorHandler.js"
   ],
@@ -2173,6 +2182,9 @@
   "This tax group details already exist in our system": [
     "src/models/setting.model.js"
   ],
+  "This till is not activated. Open the activation screen and enter the Muftgo key.": [
+    "src/middleware/activation-gate.js"
+  ],
   "This token cannot message customers": [
     "app.js"
   ],
@@ -2184,6 +2196,9 @@
   ],
   "This user details already exist in our system": [
     "src/models/user.model.js"
+  ],
+  "Till activated. You can now sign in.": [
+    "src/routes/activation.routes.js"
   ],
   "Token created. Store it now - it is not shown again.": [
     "app.js"
@@ -2232,6 +2247,9 @@
   ],
   "Too many voice sessions in a minute. Please wait a moment and try again.": [
     "src/middleware/assistant-rate-limit.js"
+  ],
+  "Too many wrong keys. Wait ten minutes and try again.": [
+    "src/routes/activation.routes.js"
   ],
   "Top performer data retrieved successfully": [
     "src/models/dashboard.model.js"

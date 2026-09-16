@@ -1,0 +1,6 @@
+{
+  "v": 1,
+  "algo": "scrypt-16384-8-1-32",
+  "salt": "cbf0fa28ebf3a507d6465976defac9ad",
+  "hash": "d623b40ecbc925835827372c775879dafb4f5d68d13daf86d8f7c23c2ac8aaf5"
+}

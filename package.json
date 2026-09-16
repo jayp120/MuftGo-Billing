@@ -18,6 +18,8 @@
     "prebuild": "npm run clear:brand-seed && npm run check:mongodb && npm run prepare:bundle",
     "build": "electron-builder --win --x64",
     "seed:muftgo-brand": "node scripts/seed-muftgo-brand.js",
+    "activation:password": "node scripts/set-activation-password.js",
+    "activation:make-verifier": "node scripts/set-activation-password.js --make-verifier",
     "prebuild:muftgo": "npm run clear:brand-seed && npm run seed:muftgo-brand && npm run check:mongodb && npm run prepare:bundle",
     "build:muftgo": "electron-builder --win --x64",
     "prebuild:fast": "npm run clear:brand-seed && npm run check:mongodb && npm run prepare:bundle",

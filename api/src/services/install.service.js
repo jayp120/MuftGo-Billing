@@ -12,6 +12,7 @@ const { ObjectId } = require('mongodb');
 const bcrypt = require('bcryptjs');
 const fs = require('fs');
 const path = require('path');
+const { allocateBarcodeCodes } = require('../utils/barcode-sequence');
 
 /**
  * Install Service
@@ -1371,10 +1372,39 @@ class InstallService {
       // Insert items/products
       const itemMultiData = [];
 
+      /*
+       * Sample products arrive with scannable barcodes, not blanks. A shop
+       * evaluating the software scans a sample on day one; a catalogue of
+       * unscannable rows teaches that barcodes are typing work, which is the
+       * opposite of the sale it is meant to demonstrate. Codes are allocated
+       * above everything the branch already uses, so reseeding beside real
+       * products never duplicates one.
+       */
+      let seedBarcodes = [];
+      try {
+        const ItemRepository = require('../repositories/item.repository');
+        const itemRepo = new ItemRepository();
+        const toObjectId = (v) => (ObjectId.isValid(String(v)) ? new ObjectId(String(v)) : v);
+        const existing = await itemRepo.listBranchBarcodeCodes(
+          toObjectId(branchId),
+          licenseId ? toObjectId(licenseId) : licenseId
+        );
+        seedBarcodes = allocateBarcodeCodes(existing, demoData.products.length);
+      } catch (e) {
+        /* A shop with unscannable samples is a working shop; numbering must
+           never fail an install. Fall back to a self-consistent batch. */
+        console.error('Seed barcodes skipped, using batch-local numbers:', e.message);
+        seedBarcodes = allocateBarcodeCodes([], demoData.products.length);
+      }
+
       for (const product of demoData.products) {
         const category = categoryMap[product.category];
         if (category) {
           const price = parseFloat(product.price);
+          /* Clothing packs carry the GST chapter in the description text
+             ("HSN 6205") - lift it onto the record so the tax line is right
+             from the first bill instead of '0' everywhere. */
+          const hsnMatch = String(product.description || '').match(/HSN\s*(\d{4,8})/i);
           itemMultiData.push({
             /*
              * Tagged as demo, so the Demo Data switch can hide it later. The
@@ -1399,7 +1429,7 @@ class InstallService {
             date: now,
             item_status: 'regular',
             itemid: '',
-            barcode_id: '',
+            barcode_id: seedBarcodes[itemMultiData.length] || '',
             created_date: now,
             created_by: username,
             created_by_id: userId,
@@ -1408,7 +1438,7 @@ class InstallService {
             supplier_name: supplierName,
             discount_percentage: 0.0,
             discount_amount: 0,
-            hsncode: '0',
+            hsncode: hsnMatch ? hsnMatch[1] : '0',
             hsndescription: '',
             tax_method: 'default',
             tax_name: taxData ? taxData.name : '',

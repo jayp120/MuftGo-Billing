@@ -836,6 +836,7 @@ PosnicPro = {
             jspdf: ['script/lazy/jspdf2.js'],
             html2canvas: ['script/lazy/html2canvas.js'],
             sortable: ['script/lazy/sortable.js'],
+            zxing: ['script/lazy/zxing.js'],
             summernote: ['script/lazy/summernote.js'],
             colorpicker: ['script/lazy/colorpicker.js'],
             reports: ['script/lazy/reports.js'],

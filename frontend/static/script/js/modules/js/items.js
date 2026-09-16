@@ -2599,6 +2599,13 @@ PosnicPro.items = {
         }
     },
 
+    /* QR companion on the price tag: same number as the barcode, so a phone
+       camera scans the tag when no USB scanner is handy. */
+    qrCheckbox: function (checked) {
+        $("#label_show_qr").prop("checked", !!checked);
+        newBarcode();
+    },
+
     printLabelBarcode: function () {
         var labelWidth = $('#document_width').val();   // in inches
         var labelHeight = $('#document_height').val(); // in inches
@@ -2658,18 +2665,99 @@ PosnicPro.items = {
             "max-height: 100px !important; " +
             "} " +
 
+            "#print-content-copy #labelQRWrap { " +
+            "display: flex !important; " +
+            "justify-content: center !important; " +
+            "} " +
+
+            "#print-content-copy #labelQR img, " +
+            "#print-content-copy #labelQR canvas { " +
+            "width: 72px !important; " +
+            "height: 72px !important; " +
+            "} " +
+
             ".fontfamily { " +
             "font-family: " + fontFamily + " !important; " +
             "text-align: " + textAlign + " !important; " +
             "}";
 
-        // Use PrintJS to print with exact dimensions
-        printJS({
-            printable: printContent.outerHTML,
-            type: 'raw-html',
-            style: printStyle,
-            scanStyles: false
-        });
+        // Use PrintJS to print with exact dimensions. When the QR companion
+        // is on, print a beat later: qrcodejs finishes its image
+        // asynchronously, and cloning mid-draw would print a tag with a
+        // barcode but an empty square.
+        var qrOn = (function () {
+            try {
+                return !!($("#label_show_qr").length && $("#label_show_qr").prop("checked"));
+            } catch (e) { return false; }
+        })();
+        // Copies: 1 prints one label at its exact size; more tiles that many
+        // identical stickers on an A4 sheet - one sticker per piece, so 7
+        // L-shirts print 7. Capped like the bulk sheets elsewhere, so a typo
+        // cannot hang the browser with hundreds of labels.
+        var labelCopies = (function () {
+            try {
+                var n = Math.round(Number($('#label_copies').val()) || 1);
+                if (!(n >= 1)) return 1;
+                return Math.min(n, 500);
+            } catch (e) { return 1; }
+        })();
+        var doPrint = function () {
+            var fresh = document.getElementById("print-preview").cloneNode(true);
+            fresh.id = 'print-content-copy';
+            if (labelCopies <= 1) {
+                printJS({
+                    printable: fresh.outerHTML,
+                    type: 'raw-html',
+                    style: printStyle,
+                    scanStyles: false
+                });
+                return;
+            }
+            /* A4 sheet of identical stickers. The label keeps its own width
+               and height per cell; the QR image rides the markup string, so
+               every copy carries it. */
+            var one = fresh.outerHTML.replace(/id="print-content-copy"/, 'class="sheet-copy"');
+            var cells = '';
+            for (var c = 0; c < labelCopies; c++) { cells += one; }
+            var sheetStyle =
+                "@page { size: A4 portrait; margin: 8mm; } " +
+                "html, body { margin: 0; padding: 0; font-family: " + fontFamily + "; } " +
+                ".sheet { display: flex; flex-wrap: wrap; } " +
+                ".sheet-copy { " +
+                "width: " + labelWidth + "in !important; " +
+                "height: " + labelHeight + "in !important; " +
+                "padding: 2px; box-sizing: border-box; border: 1px dotted #ccc; " +
+                "background: " + backgroundColor + "; " +
+                "page-break-inside: avoid; " +
+                "} " +
+                ".sheet-copy > div { " +
+                "width: 100% !important; height: 100% !important; " +
+                "display: flex !important; flex-direction: column !important; " +
+                "justify-content: center !important; align-items: center !important; " +
+                "} " +
+                ".sheet-copy p { margin: 0 !important; font-family: " + fontFamily + " !important; text-align: " + textAlign + " !important; } " +
+                ".sheet-copy svg { display: block !important; margin: 2px auto !important; max-width: 100% !important; max-height: 100px !important; } " +
+                ".sheet-copy #labelQRWrap { display: flex !important; justify-content: center !important; } " +
+                ".sheet-copy #labelQR img, .sheet-copy #labelQR canvas { width: 72px !important; height: 72px !important; } " +
+                "@media print { .sheet-copy { border: none; } }";
+            printJS({
+                printable: '<div class="sheet">' + cells + '</div>',
+                type: 'raw-html',
+                style: sheetStyle,
+                scanStyles: false
+            });
+        };
+        if (qrOn) {
+            newBarcode();
+            setTimeout(doPrint, 250);
+        } else {
+            printJS({
+                printable: printContent.outerHTML,
+                type: 'raw-html',
+                style: printStyle,
+                scanStyles: false
+            });
+        }
 
         // $('#view_print_lable').modal('hide');
         //
@@ -5034,6 +5122,29 @@ var newBarcode = function () {
             }
         }
     });
+
+    /* QR companion (offline qrcodejs bundle): the same value as the barcode,
+       so a phone camera reads the tag. A label whose QR fails still prints
+       its barcode - never let the garnish break the working path. */
+    try {
+        var showQR = $("#label_show_qr").length ? $("#label_show_qr").prop("checked") : false;
+        var qrBox = document.getElementById("labelQR");
+        var qrWrap = document.getElementById("labelQRWrap");
+        if (qrBox) {
+            qrBox.innerHTML = "";
+            if (showQR && barcodeValue && typeof QRCode !== "undefined") {
+                new QRCode(qrBox, {
+                    text: String(barcodeValue),
+                    width: 72,
+                    height: 72,
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+                if (qrWrap) qrWrap.style.display = "flex";
+            } else if (qrWrap) {
+                qrWrap.style.display = "none";
+            }
+        }
+    } catch (e) { /* barcode above already rendered; print without QR */ }
 
     // Update preview content
     updateLabelPreview();

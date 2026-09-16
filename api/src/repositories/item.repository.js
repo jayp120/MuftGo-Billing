@@ -24,6 +24,7 @@ const DIET_MARKS = ['veg', 'non_veg', 'egg', 'vegan'];
 const dishIcons = require('../utils/dish-icons');
 const dishFacts = require('../utils/dish-facts');
 const voiceSettings = require('../utils/voice-settings');
+const { allocateBarcodeCodes } = require('../utils/barcode-sequence');
 
 const onlineOrderingDiet = (value) => {
   const v = String(value || '')
@@ -1509,6 +1510,28 @@ class ItemRepository extends BaseModel {
     };
   }
 
+  /*
+   * Every code this branch already answers to - primaries and alternates.
+   * Feeds the barcode allocator so a generated code never duplicates one a
+   * product already has. Projection-only read: cheap even on big catalogues.
+   */
+  async listBranchBarcodeCodes(branchObjectId, licenseObjectId) {
+    const collection = await this.getCollection(this.collectionName);
+    const filter = { 'branch_access.branch_id': branchObjectId };
+    if (licenseObjectId) filter.license = licenseObjectId;
+    const rows = await collection
+      .find(filter, { projection: { barcode_id: 1, barcodes: 1 } })
+      .toArray();
+    const codes = [];
+    for (const row of rows) {
+      if (row.barcode_id) codes.push(String(row.barcode_id));
+      if (Array.isArray(row.barcodes)) {
+        for (const code of row.barcodes) codes.push(String(code));
+      }
+    }
+    return codes;
+  }
+
   async upsertItem(data, id = '', context = {}) {
     try {
       const collection = await this.getCollection(this.collectionName);
@@ -1768,6 +1791,21 @@ class ItemRepository extends BaseModel {
         unit: data.unit || 'qty',
         unit_id: data.unit_id || '',
       };
+
+      /*
+       * A blank barcode on a NEW item means "give me the next free number
+       * for this branch" - the receiving counter's fastest path. The shop
+       * that scans a supplier carton into the barcode box keeps exactly
+       * what it typed; only an untouched box is numbered, and the clash
+       * check above has already run, so a generated code can only land on
+       * free ground. Edits never renumber: an existing code stays put even
+       * if the box is cleared and saved.
+       */
+      if (!id && !updateData.barcode_id) {
+        const existing = await this.listBranchBarcodeCodes(branchObjectId, licenseObjectId);
+        const [generated] = allocateBarcodeCodes(existing, 1);
+        updateData.barcode_id = generated;
+      }
 
       /*
        * Open price (IC1): the deliberate ask-at-the-till state. Presence-

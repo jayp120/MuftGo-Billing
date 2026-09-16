@@ -1,8 +1,8 @@
 # MuftGo Billing — Janata Vasahat clothing sample data
 
 Demo shop: **Style Hub Clothing (demo)** — Shop 12, Janata Vasahat, Parvati,
-Pune 411009 · +91 98765 43210 · GSTIN 27ABCDE1234F1Z5 *(placeholder — replace
-with the client's real details on the Shop Settings page before going live).*
+Pune 411009 · +91 98765 43210 · GSTIN 27ABCDE1234F1Z5 _(placeholder — replace
+with the client's real details on the Shop Settings page before going live)._
 
 ## What you get
 
@@ -19,15 +19,15 @@ shop is seeded with:
 
 ## Categories
 
-| Category | Items | Covers |
-|---|---|---|
-| Men's Wear | 10 | Shirts, tees, jeans, trousers, kurta, vest/brief, lungi |
-| Women's Ethnic | 9 | Cotton/silk/nauvari sarees, kurtis, palazzo, leggings, suit sets |
-| Women's Daily Wear | 6 | Nighty, tops, petticoat, blouse cloth, jeggings, dupatta |
-| Kids Wear | 9 | Boys/girls 2–14 yrs, ethnic sets, school uniform, baby suits |
-| Festive & Wedding | 6 | Sherwani set, blazer, lehenga, gown, Banarasi, Indo-western |
-| Winter & Essentials | 5 | Hoodies, jackets, track pants, shawls, thermals |
-| Accessories & Services | 4 | Belt, socks, hankies, alteration charge |
+| Category               | Items | Covers                                                           |
+| ---------------------- | ----- | ---------------------------------------------------------------- |
+| Men's Wear             | 10    | Shirts, tees, jeans, trousers, kurta, vest/brief, lungi          |
+| Women's Ethnic         | 9     | Cotton/silk/nauvari sarees, kurtis, palazzo, leggings, suit sets |
+| Women's Daily Wear     | 6     | Nighty, tops, petticoat, blouse cloth, jeggings, dupatta         |
+| Kids Wear              | 9     | Boys/girls 2–14 yrs, ethnic sets, school uniform, baby suits     |
+| Festive & Wedding      | 6     | Sherwani set, blazer, lehenga, gown, Banarasi, Indo-western      |
+| Winter & Essentials    | 5     | Hoodies, jackets, track pants, shawls, thermals                  |
+| Accessories & Services | 4     | Belt, socks, hankies, alteration charge                          |
 
 ## Photos
 
@@ -41,7 +41,9 @@ absent). To add photos later, drop `.webp` files in
 
 1. Shop Settings → replace demo name/address/phone/GSTIN, upload shop logo.
 2. Taxes → verify GST rates against the HSN hints (5%/12% split).
-3. Barcodes → print and stick; `barcode_id` is blank on seed items.
+3. Barcodes → every seeded product already has one (200001+, auto-assigned;
+   blank on manual create also auto-numbers). Print tags from Items → label
+   (barcode + QR) and stick; never reuse 200001+ numbers as PLU quick-codes.
 4. Suppliers → replace demo supplier with real wholesalers (e.g. Raviwar Peth).
 5. Opening stock → adjust `available_quantity` to the physical count.
 6. Receipt → set 80mm/58mm vs A4 in Hardware Manager; see `MUFTGO-PRINTING.md`.

@@ -10420,19 +10420,33 @@ $('#sales_new_item_name').scannerDetection({
 });
 
 /*
- * Camera scan (Loyverse study L3): the browser's BarcodeDetector where it
- * exists (Chromium on Android/desktop - exactly the cheap devices busy
- * shops carry). The button only shows when the capability is real; codes
- * land in the SAME addByBarcode path as the hardware wedge.
+ * Camera scan (Loyverse study L3): the browser's BarcodeDetector where the
+ * platform ships it (Android/macOS Chromium - exactly the cheap devices busy
+ * shops carry), and the vendored ZXing bundle everywhere else. Windows
+ * desktop Chromium - including this app's own window - exposes no
+ * BarcodeDetector at all, so a till with no scanner gun reads its front
+ * camera through ZXing instead. Either way codes land in the SAME
+ * addByBarcode path as the hardware wedge, and the ZXing file is lazy-loaded
+ * on first use, never parsed until somebody actually scans.
  */
 PosnicPro.sales.cameraScan = {
     _stream: null,
     _timer: null,
-    open: function () {
-        if (!('BarcodeDetector' in window)) {
-            PosnicPro.alert('warning', PosnicPro.i18n.t('lang_camera_scanning_needs_chrome_or_edge_on_th', 'Camera scanning needs Chrome or Edge on this device'));
-            return;
+    _zxReader: null,
+    _nativeDetector: function () {
+        if (!('BarcodeDetector' in window)) return null;
+        /* Price tags carry a CODE128 barcode AND a QR with the same
+           number: ask for both families explicitly so a browser whose
+           default set is narrow still reads the tag. Older Chromium
+           throws on the formats argument - then the default detector
+           (which already reads both) is exactly the fallback. */
+        try {
+            return new window.BarcodeDetector({ formats: ['qr_code', 'code_128', 'code_39', 'ean_13', 'ean_8', 'upc_a', 'upc_e', 'itf', 'codabar'] });
+        } catch (e) {
+            return new window.BarcodeDetector();
         }
+    },
+    _ensureModal: function () {
         if (!$('#camera_scan_modal').length) {
             $('body').append(
                 '<div class="modal fade" id="camera_scan_modal" tabindex="-1" role="dialog" aria-hidden="true">' +
@@ -10445,20 +10459,28 @@ PosnicPro.sales.cameraScan = {
                 '</div></div></div></div>');
             $('#camera_scan_modal').on('hidden.bs.modal', PosnicPro.sales.cameraScan.stop);
         }
+    },
+    _heard: function (code) {
+        if (!code) return;
+        PosnicPro.sales.cameraScan.stop();
+        $('#camera_scan_modal').modal('hide');
+        PosnicPro.sales.addByBarcode(String(code));
+    },
+    _openNative: function (detector) {
         var self = PosnicPro.sales.cameraScan;
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }).then(function (stream) {
+        /* ideal, not exact: phones have a back camera, tills only a front one.
+           Either satisfies the request; exact 'environment' leaves a till with
+           no back camera with nothing. */
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } } }).then(function (stream) {
             self._stream = stream;
             var video = document.getElementById('camera_scan_video');
             $('#camera_scan_modal').modal('show');
             video.srcObject = stream;
-            var detector = new window.BarcodeDetector();
             self._timer = setInterval(function () {
                 if (!video.videoWidth) { return; }
                 detector.detect(video).then(function (codes) {
                     if (codes && codes.length && codes[0].rawValue) {
-                        var code = codes[0].rawValue;
-                        $('#camera_scan_modal').modal('hide');
-                        PosnicPro.sales.addByBarcode(code);
+                        self._heard(codes[0].rawValue);
                     }
                 }).catch(function () { /* keep looking */ });
             }, 350);
@@ -10466,8 +10488,67 @@ PosnicPro.sales.cameraScan = {
             PosnicPro.alert('error', PosnicPro.i18n.t('lang_could_not_open_the_camera_check_permission', 'Could not open the camera - check permission'));
         });
     },
+    _zxingReady: function () {
+        /* Loaded already, or loadable on demand from our own origin - same
+           server as the page, so no internet is needed at scan time. Direct
+           _script rather than lazy.load: that one alerts about report tools
+           on failure, which would confuse a cashier holding a barcode. */
+        if (window.ZXing && window.ZXing.BrowserMultiFormatReader) return Promise.resolve();
+        if (PosnicPro.lazy && PosnicPro.lazy._script) {
+            return PosnicPro.lazy._script('script/lazy/zxing.js').then(function () {
+                if (!(window.ZXing && window.ZXing.BrowserMultiFormatReader)) {
+                    throw new Error('decoder missing after load');
+                }
+            });
+        }
+        return Promise.reject(new Error('no script loader'));
+    },
+    _openZxing: function () {
+        var self = PosnicPro.sales.cameraScan;
+        self._zxingReady().then(function () {
+            var video = document.getElementById('camera_scan_video');
+            $('#camera_scan_modal').modal('show');
+            var reader = new window.ZXing.BrowserMultiFormatReader();
+            self._zxReader = reader;
+            /* The reader opens its own video-only stream and calls back on
+               success; miss frames never surface, it just keeps looking
+               until stop() resets it. */
+            reader.decodeFromConstraints(
+                { video: { facingMode: { ideal: 'environment' } } },
+                video,
+                function (result) {
+                    if (result && typeof result.getText === 'function') {
+                        self._heard(result.getText());
+                    }
+                }
+            ).catch(function () {
+                self._zxReader = null;
+                PosnicPro.alert('error', PosnicPro.i18n.t('lang_could_not_open_the_camera_check_permission', 'Could not open the camera - check permission'));
+            });
+        }).catch(function () {
+            PosnicPro.alert('warning', PosnicPro.i18n.t('lang_camera_scanning_needs_chrome_or_edge_on_th', 'Camera scanning needs Chrome or Edge on this device'));
+        });
+    },
+    open: function () {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            PosnicPro.alert('warning', PosnicPro.i18n.t('lang_camera_scanning_needs_chrome_or_edge_on_th', 'Camera scanning needs Chrome or Edge on this device'));
+            return;
+        }
+        var self = PosnicPro.sales.cameraScan;
+        self._ensureModal();
+        var detector = self._nativeDetector();
+        if (detector) {
+            self._openNative(detector);
+        } else {
+            self._openZxing();
+        }
+    },
     stop: function () {
         var self = PosnicPro.sales.cameraScan;
+        if (self._zxReader) {
+            try { self._zxReader.reset(); } catch (e) { /* already stopped */ }
+            self._zxReader = null;
+        }
         if (self._timer) { clearInterval(self._timer); self._timer = null; }
         if (self._stream) {
             self._stream.getTracks().forEach(function (t) { t.stop(); });
@@ -10476,7 +10557,10 @@ PosnicPro.sales.cameraScan = {
     }
 };
 $(document).ready(function () {
-    if ('BarcodeDetector' in window && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    /* The button needs a camera, not a particular decoder: native where the
+       platform ships it, lazy ZXing everywhere else. Showing it is harmless
+       either way - open() still warns honestly when neither is available. */
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         $('#camera_scan_btn').show();
     }
     // Quick Sale is a feature, default ON - the pad follows the switch

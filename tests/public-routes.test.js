@@ -153,6 +153,16 @@ const ALLOWED_ANONYMOUS = {
     // till, which is backwards: pairing is what happens before anyone can.
     '/',
   ],
+  'activation.routes.js': [
+    // The till-unlock screen and its API. Anonymous by design: a copied
+    // installer opens here BEFORE any user exists to log in as, so requiring
+    // a session would deadlock every fresh till. The screen proves nothing
+    // and reads nothing - it only ACCEPTS the Muftgo team key, checked with
+    // scrypt against a baked-in verifier, rate-limited to 10 tries per
+    // 10 minutes per IP. /setup and /change answer 410 Gone (shops can
+    // neither set nor rotate the key); /status reports only lock state.
+    '/status', '/setup', '/activate', '/change', '/',
+  ],
   'base.routes.js': [
     // Liveness only. "/" says it is running; "/health" reports status, time and
     // uptime to a stranger and keeps the version, platform and memory figures

@@ -169,6 +169,11 @@
                                             <div style="flex: 1; display: flex; align-items: center; justify-content: center; max-height: 60%;">
                                                 <svg id="labelBarcode" style="max-width:95%; max-height:100%; display: block;"></svg>
                                             </div>
+                                            <!-- QR companion: same number as the barcode, so a phone
+                                                 camera scans the tag when no USB scanner is handy. -->
+                                            <div id="labelQRWrap" style="display:none; margin-top:4px; align-items:center; justify-content:center;">
+                                                <div id="labelQR"></div>
+                                            </div>
                                             <div style="margin-top: 2px;">
                                                 <p class="text-align fontfamily" style="font-size:0.8em; margin: 1px 0; line-height: 1.1;">
                                                     <span id="mrp-price"></span>&nbsp;&nbsp;<span id="price-name"></span>
@@ -226,6 +231,15 @@
                             </div>
                         </div>
 
+                        <!-- Copies: one sticker per piece - L shirts with 7 pieces print 7 identical stickers -->
+                        <div class="row">
+                            <div class="col-md-8 col-xs-12 col-md-offset-1 form-group">
+                                <label for="label_copies"><lang class="lang_number_of_stickers">Number of stickers</lang></label>
+                                <input id="label_copies" class="form-control border-control" type="number" min="1" max="500" step="1" value="1" aria-label="Number of stickers" data-t-aria-label="lang_number_of_stickers"/>
+                                <small class="text-muted"><lang class="lang_stickers_hint">1 = single label. More = full A4 sheet, one sticker per piece.</lang></small>
+                            </div>
+                        </div>
+
                         <!-- Name -->
                         <div class="row">
                             <div class="col-md-12 col-xs-12 col-md-offset-1">
@@ -269,6 +283,13 @@
                             </div>
                             <div class="col-md-8 col-xs-12 input-container">
                                 <textarea id="address-value" class="form-control border-control"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- QR companion -->
+                        <div class="row">
+                            <div class="col-md-8 col-xs-12 col-md-offset-1 form-group">
+                                <label for="label_show_qr"><input type="checkbox" id="label_show_qr" onclick="PosnicPro.items.qrCheckbox(this.checked);" checked> <lang class="lang_print_qr_too">Print QR code too (same number - scans with any phone camera)</lang></label>
                             </div>
                         </div>
 
