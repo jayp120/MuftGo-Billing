@@ -131,3 +131,6 @@ cmsg.tmp
 *-patch.py
 *.py
 !scripts/**/*.py
+
+# Runtime-generated receipt PDFs from local runs - never commit.
+api/public/pdfs/
