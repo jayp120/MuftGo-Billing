@@ -3112,6 +3112,9 @@ class ItemRepository extends BaseModel {
         supplier_name: item.supplier_name || '',
         // Additive: the stock-adjustment search shows current stock.
         available_quantity: item.available_quantity || 0,
+        // Sticker sheet: purchase lines carry the barcode so Print stickers
+        // needs no second lookup per row.
+        barcode_id: item.barcode_id || '',
         // Additive: the redesigned typeahead rows show stock state.
         track_inventory: item.track_inventory !== false,
         item_kind: item.item_kind || 'product',
@@ -3196,6 +3199,8 @@ class ItemRepository extends BaseModel {
         supplier_id: item.supplier_id?.toString() || '',
         supplier_name: item.supplier_name || '',
         available_quantity: item.available_quantity || 0,
+        // Sticker sheet: autofilled purchase lines carry the barcode too.
+        barcode_id: item.barcode_id || '',
       }));
 
       /* Incoming (PO step 3): what is already on an open order, so a shop

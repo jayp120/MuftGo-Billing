@@ -499,6 +499,15 @@ describe('ItemRepository', () => {
       );
       expect(r.status).toBe(true);
     });
+    test('carries barcode_id so purchase lines can print stickers with no second lookup', async () => {
+      col.find.mockReturnValue(mkChain([{ name: 'Shirt / L', barcode_id: '200032' }]));
+      const r = await repo.getReceivingItemsAjaxList(
+        { query: 'shirt' },
+        { branchId: FAKE_BRANCH, licenseId: FAKE_LICENSE }
+      );
+      expect(r.status).toBe(true);
+      expect(r.data[0]).toMatchObject({ item_name: 'Shirt / L', barcode_id: '200032' });
+    });
     test('returns error without branch', async () => {
       const r = await repo.getReceivingItemsAjaxList({}, {});
       expect(r.status).toBe(false);
@@ -515,7 +524,15 @@ describe('ItemRepository', () => {
 
     test('lists a supplier`s items in the receiving-autocomplete row shape', async () => {
       col.find.mockReturnValue(
-        mkChain([{ _id: FAKE_ID, name: 'Oil 1L', itemid: '7', available_quantity: 3 }])
+        mkChain([
+          {
+            _id: FAKE_ID,
+            name: 'Oil 1L',
+            itemid: '7',
+            available_quantity: 3,
+            barcode_id: '200099',
+          },
+        ])
       );
       const r = await repo.getItemsBySupplier({ supplierId: FAKE_ID }, ctx);
       expect(r.status).toBe(true);
@@ -524,6 +541,7 @@ describe('ItemRepository', () => {
         item_name: 'Oil 1L',
         item_code: '7',
         available_quantity: 3,
+        barcode_id: '200099',
       });
       const filter = col.find.mock.calls[0][0];
       const flat = Object.assign({}, ...filter.$and);
