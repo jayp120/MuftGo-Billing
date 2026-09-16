@@ -22,6 +22,10 @@
   ],
   "tags": [
     {
+      "name": "Activation",
+      "description": "Mounted at /activation"
+    },
+    {
       "name": "Activity logs",
       "description": "Mounted at /activity-logs"
     },
@@ -197,6 +201,124 @@
     }
   ],
   "paths": {
+    "/activation/status": {
+      "get": {
+        "summary": "status",
+        "operationId": "get_activation_status",
+        "tags": [
+          "Activation"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Validation failed"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/activation/setup": {
+      "post": {
+        "summary": "till",
+        "operationId": "post_activation_setup",
+        "tags": [
+          "Activation"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Validation failed"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "description": "Request body is not yet documented. This endpoint has no validation middleware, so its shape cannot be derived from the source. Adding validation improves both runtime safety and this document."
+      }
+    },
+    "/activation/activate": {
+      "post": {
+        "summary": "in",
+        "operationId": "post_activation_activate",
+        "tags": [
+          "Activation"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Validation failed"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "description": "Request body is not yet documented. This endpoint has no validation middleware, so its shape cannot be derived from the source. Adding validation improves both runtime safety and this document."
+      }
+    },
+    "/activation/change": {
+      "post": {
+        "summary": "team",
+        "operationId": "post_activation_change",
+        "tags": [
+          "Activation"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Validation failed"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "description": "Request body is not yet documented. This endpoint has no validation middleware, so its shape cannot be derived from the source. Adding validation improves both runtime safety and this document."
+      }
+    },
+    "/activation": {
+      "get": {
+        "summary": "html",
+        "operationId": "get_activation",
+        "tags": [
+          "Activation"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Validation failed"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
     "/activity-logs/sales": {
       "get": {
         "summary": "getSalesAuditLogs",
