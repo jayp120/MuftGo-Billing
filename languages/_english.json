@@ -304,6 +304,7 @@
   "lang_bar_margin": "Bar margin",
   "lang_bar_text_margin": "Bar text margin",
   "lang_bar_width": "Bar width",
+  "lang_barcode_draw_failed": "The barcodes could not be drawn - reload the page and try again.",
   "lang_barcode_printer_not_ready": "The barcode printer is not ready - reload the page and try again.",
   "lang_barcode_title": "Barcode",
   "lang_barcodeid_title": "Barcode Id",

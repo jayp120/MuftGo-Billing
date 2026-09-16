@@ -1223,22 +1223,33 @@ class InstallService {
       const demoDatasetSvc = require('./demo-dataset');
       let demoData = null;
       let packTag = businessType;
-      const datasetPack = await demoDatasetSvc.loadDatasetPack({
-        currency: params.currencyCode,
-        businessType,
-        uploadsRoot: path.join(__dirname, '../../uploads'),
-      });
-      if (datasetPack) {
-        demoData = datasetPack;
-        /* Tag rows with the CANONICAL trade key, not the typed-in vocabulary:
-           the purge and the chooser's "current pack" both read this tag back. */
-        packTag = demoDatasetSvc.datasetKeyFor(businessType) || businessType;
-        console.log(
-          `📦 Demo data from dataset ${datasetPack.datasetId} (${demoData.products.length} products)`
-        );
-      } else {
-        const { getDemoDataByType } = require('../../utils/demoData');
-        demoData = getDemoDataByType(businessType);
+      /* MuftGo Billing is clothing retail only: its own clothing catalogue
+         always wins over the website datasets, which carry other trades'
+         data (a clothing shop must never install supermarket samples by
+         mis-tap or by a reachable download). Other trades keep the
+         dataset-first order below. */
+      const demoUtil = require('../../utils/demoData');
+      const isClothingInstall =
+        demoUtil.getDemoDataByType(businessType) === demoUtil.textileDemoData;
+      let datasetPack = null;
+      if (!isClothingInstall) {
+        datasetPack = await demoDatasetSvc.loadDatasetPack({
+          currency: params.currencyCode,
+          businessType,
+          uploadsRoot: path.join(__dirname, '../../uploads'),
+        });
+        if (datasetPack) {
+          demoData = datasetPack;
+          /* Tag rows with the CANONICAL trade key, not the typed-in vocabulary:
+             the purge and the chooser's "current pack" both read this tag back. */
+          packTag = demoDatasetSvc.datasetKeyFor(businessType) || businessType;
+          console.log(
+            `📦 Demo data from dataset ${datasetPack.datasetId} (${demoData.products.length} products)`
+          );
+        }
+      }
+      if (!demoData) {
+        demoData = demoUtil.getDemoDataByType(businessType);
       }
 
       if (!demoData) {

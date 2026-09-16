@@ -109,6 +109,9 @@
 <!-- Barcode label printing uses the vendored copy so tills do not need internet access. -->
 <script src="script/vendor/print-js/print.min.js"></script>
 <link rel="stylesheet" href="script/vendor/print-js/print.min.css">
+<!-- JsBarcode rides its own tag (not the bundle): concatenated webpack code
+     never registers its globals, so sheets printed with no bars. -->
+<script src="script/vendor/jsbarcode/JsBarcode.all.min.js"></script>
 
 <!-- 2. MODIFIED HTML MODAL (Replace your existing view_print_lable modal) -->
 <div class="modal fade close_on_esc" id="view_print_lable" tabindex="-1" role="dialog" aria-hidden="true">

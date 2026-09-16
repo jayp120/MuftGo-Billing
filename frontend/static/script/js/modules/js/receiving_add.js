@@ -550,7 +550,12 @@ PosnicPro.receivings = {
             PosnicPro.alert('info', PosnicPro.i18n.t('lang_stickers_not_for_returns', 'Stickers print from a purchase entry, not from a return.'));
             return false;
         }
-        if (typeof $.fn.JsBarcode !== 'function' && typeof $.fn.jsbarcode !== 'function') {
+        /* Renderer, decided once per print: the vanilla entry point first
+           (no jQuery bridge involved), the bridge second. Either can be
+           absent on a page whose vendor tag has not executed yet. */
+        var canVanilla = (typeof window.JsBarcode === 'function');
+        var canBridge = (typeof $.fn.JsBarcode === 'function');
+        if (!canVanilla && !canBridge) {
             PosnicPro.alert('error', PosnicPro.i18n.t('lang_barcode_printer_not_ready', 'The barcode printer is not ready - reload the page and try again.'));
             return false;
         }
@@ -573,17 +578,29 @@ PosnicPro.receivings = {
                 skipped ? skipped + ' line(s) have no barcode yet - save the item with its barcode first.' : 'Add lines first, then print stickers.'));
             return false;
         }
-        var barcodeFn = ($.fn.JsBarcode === 'function') ? 'JsBarcode' : 'jsbarcode';
         var svgByCode = {};
         var $work = $('<div style="position:absolute;left:-9999px;top:0;"></div>').appendTo('body');
         Object.keys(labels.reduce(function (acc, l) { acc[l.code] = 1; return acc; }, {})).forEach(function (code) {
-            var $svg = $('<svg></svg>').appendTo($work);
+            var markup = '';
             try {
-                $svg[barcodeFn](code, { format: 'CODE128', height: 40, width: 1.6, fontSize: 12, margin: 4, displayValue: true });
-                svgByCode[code] = $work.children().last().prop('outerHTML');
-            } catch (e) { svgByCode[code] = ''; }
+                var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                $work.append(svg);
+                var opts = { format: 'CODE128', height: 40, width: 1.6, fontSize: 12, margin: 4, displayValue: true };
+                if (canVanilla) window.JsBarcode(svg, code, opts);
+                else $(svg).JsBarcode(code, opts);
+                markup = svg.outerHTML || '';
+                /* A barcode with no bars is a blank sticker: refuse it loudly
+                   rather than printing names with nothing to scan. */
+                if (markup.indexOf('<rect') === -1 && markup.indexOf('<path') === -1) markup = '';
+            } catch (e) { markup = ''; }
+            svgByCode[code] = markup;
         });
         $work.remove();
+        var failed = Object.keys(svgByCode).filter(function (k) { return !svgByCode[k]; });
+        if (failed.length) {
+            PosnicPro.alert('error', PosnicPro.i18n.t('lang_barcode_draw_failed', 'The barcodes could not be drawn - reload the page and try again.'));
+            return false;
+        }
         var cells = labels.map(function (l) {
             return '<div class="lbl"><div class="lbl-name">' + $('<span>').text(l.name).html() + '</div>' + (svgByCode[l.code] || '') + '</div>';
         }).join('');

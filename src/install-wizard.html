@@ -999,14 +999,11 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Business Type</label>
-                        <select id="qBusinessType">
-                            <option value="supermarket" selected>🛒 Supermarket / Kirana Store</option>
-                            <option value="textile">🧵 Textile / Garment Shop</option>
-                            <option value="electrical">💡 Electrical Shop</option>
-                            <option value="hardware">🔧 Hardware Shop</option>
-                            <option value="cafe">☕ Cafe / Restaurant</option>
-                            <option value="bakery">🥐 Bakery</option>
-                            <option value="icecream">🍦 Ice Cream Parlour</option>
+                        <!-- MuftGo Billing is clothing retail only: one trade,
+                             pre-selected, so a shop can never install the
+                             wrong catalogue by mis-tap. -->
+                        <select id="qBusinessType" disabled>
+                            <option value="textile" selected>Clothing Retail (Shirts, Jeans, T-Shirts, Track Pants)</option>
                         </select>
                     </div>
                     <div class="form-group" style="display:flex;align-items:end;">
@@ -1155,30 +1152,17 @@
                         
                         <!-- Business Type Selection -->
                         <div id="businessTypeSection" style="display: none; margin-left: 30px; margin-top: 15px;">
-                            <label style="font-weight: 600; margin-bottom: 10px; display: block;">Select Your Business Type:</label>
-                            
+                            <label style="font-weight: 600; margin-bottom: 10px; display: block;">Your trade (fixed):</label>
+
                             <div style="display: flex; flex-direction: column; gap: 12px;">
+                                <!-- MuftGo Billing is clothing retail only. One
+                                     row, pre-checked: sample data can only ever
+                                     be the clothing catalogue. -->
                                 <label class="business-type-option" style="display: flex; align-items: center; padding: 12px; background: white; border: 2px solid #dee2e6; border-radius: 6px; cursor: pointer; transition: all 0.3s;">
-                                    <input type="radio" name="businessType" value="icecream" style="width: 18px; height: 18px; margin-right: 12px; cursor: pointer;">
+                                    <input type="radio" name="businessType" value="textile" checked style="width: 18px; height: 18px; margin-right: 12px; cursor: pointer;">
                                     <div>
-                                        <div style="font-weight: 600; color: #3D85C6;">🍦 Ice Cream Shop</div>
-                                        <div style="font-size: 13px; color: #6c757d; margin-top: 3px;">Ice cream flavors, toppings, cones, sundaes (15 products)</div>
-                                    </div>
-                                </label>
-                                
-                                <label class="business-type-option" style="display: flex; align-items: center; padding: 12px; background: white; border: 2px solid #dee2e6; border-radius: 6px; cursor: pointer; transition: all 0.3s;">
-                                    <input type="radio" name="businessType" value="cafe" style="width: 18px; height: 18px; margin-right: 12px; cursor: pointer;">
-                                    <div>
-                                        <div style="font-weight: 600; color: #3D85C6;">☕ Cafe & Supermarket</div>
-                                        <div style="font-size: 13px; color: #6c757d; margin-top: 3px;">Coffee, beverages, snacks, groceries (15 products)</div>
-                                    </div>
-                                </label>
-                                
-                                <label class="business-type-option" style="display: flex; align-items: center; padding: 12px; background: white; border: 2px solid #dee2e6; border-radius: 6px; cursor: pointer; transition: all 0.3s;">
-                                    <input type="radio" name="businessType" value="bakery" style="width: 18px; height: 18px; margin-right: 12px; cursor: pointer;">
-                                    <div>
-                                        <div style="font-weight: 600; color: #3D85C6;">🥖 Bakery & Others</div>
-                                        <div style="font-size: 13px; color: #6c757d; margin-top: 3px;">Bread, pastries, cakes, baked goods (15 products)</div>
+                                        <div style="font-weight: 600; color: #3D85C6;">Clothing Retail</div>
+                                        <div style="font-size: 13px; color: #6c757d; margin-top: 3px;">Shirts, jeans, t-shirts, track pants & kids wear (42 products)</div>
                                     </div>
                                 </label>
                             </div>

@@ -75,10 +75,30 @@ function copyRootPublicFiles() {
 }
 
 function copyVendorScripts() {
-  return src("static/script/vendor/**/*", {
-    base: "static/script/vendor",
-    encoding: false,
-  }).pipe(dest(`${publicDir}/script/vendor`));
+  const copy = (glob, opts, outDir) =>
+    new Promise((resolve, reject) => {
+      src(glob, opts).pipe(dest(outDir)).on("end", resolve).on("error", reject);
+    });
+  return Promise.all([
+    copy(
+      "static/script/vendor/**/*",
+      {
+        base: "static/script/vendor",
+        encoding: false,
+      },
+      `${publicDir}/script/vendor`,
+    ),
+    /* JsBarcode rides its own tag (see modules/items.html): the webpack
+       bundle dies silently when concatenated, registering neither
+       window.JsBarcode nor the jQuery bridge - sheets printed with no bars. */
+    copy(
+      "static/script/js/JsBarcode.all.min.js",
+      {
+        encoding: false,
+      },
+      `${publicDir}/script/vendor/jsbarcode`,
+    ),
+  ]);
 }
 
 /*

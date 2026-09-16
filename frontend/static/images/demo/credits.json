@@ -336,7 +336,7 @@
     "author": "Thegreenj"
   },
   "textile-casual-t-shirt": {
-    "product": "Casual T-Shirt",
+    "product": "Men Round-Neck T-Shirt - Black (S-XL)",
     "pack": "textile",
     "file": "static/images/demo/textile-casual-t-shirt.webp",
     "source": "https://commons.wikimedia.org/wiki/File:Bunny_t_shirt_with_green_shirt.jpg",
@@ -344,7 +344,7 @@
     "author": "Peachyeung316"
   },
   "textile-lungi": {
-    "product": "Lungi",
+    "product": "Men Cotton Lungi 2m",
     "pack": "textile",
     "file": "static/images/demo/textile-lungi.webp",
     "source": "https://commons.wikimedia.org/wiki/File:Lungi_of_Bangladesh_2.jpg",
@@ -352,7 +352,7 @@
     "author": "Salim_Khandoker"
   },
   "textile-cotton-saree": {
-    "product": "Cotton Saree",
+    "product": "Women Cotton Saree - Daily Wear",
     "pack": "textile",
     "file": "static/images/demo/textile-cotton-saree.webp",
     "source": "https://commons.wikimedia.org/wiki/File:Cotton-mulmul-saree-with-blouse-5-1.jpg",
@@ -360,7 +360,7 @@
     "author": "Kiransboutique"
   },
   "textile-silk-saree": {
-    "product": "Silk Saree",
+    "product": "Women Silk Saree - Party Wear",
     "pack": "textile",
     "file": "static/images/demo/textile-silk-saree.webp",
     "source": "https://commons.wikimedia.org/wiki/File:A_silk_saree_loom_in_Kumbakonam,_Tamil_Nadu.jpg",
@@ -446,5 +446,309 @@
     "source": "https://commons.wikimedia.org/wiki/File:Paint_brushes_(30804).jpg",
     "licence": "CC BY-SA 4.0",
     "author": "Rhododendrites"
+  },
+  "muftgo-shirt-white": {
+    "product": "Men Formal Shirt - White (S-XXL)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-shirt-white.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-shirt-sky": {
+    "product": "Men Formal Shirt - Sky Stripes (M-XXL)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-shirt-sky.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-shirt-maroon-check": {
+    "product": "Men Checked Casual Shirt - Maroon (M-XXL)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-shirt-maroon-check.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-shirt-beige": {
+    "product": "Men Linen Shirt - Beige (M-XL)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-shirt-beige.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-shirt-denim": {
+    "product": "Men Denim Shirt - Indigo (M-XL)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-shirt-denim.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-jeans-dark": {
+    "product": "Boys Denim Jeans (4-14 yrs)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-jeans-dark.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-jeans-black": {
+    "product": "Men Slim Jeans - Black (28-34)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-jeans-black.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-jeans-light": {
+    "product": "Women Mom-Fit Jeans - Ice Blue (28-32)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-jeans-light.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-jeans-grey": {
+    "product": "Men Baggy Jeans - Grey (28-34)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-jeans-grey.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-tshirt-white": {
+    "product": "Men Round-Neck T-Shirt - White (S-XL)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-tshirt-white.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-polo-navy": {
+    "product": "Men Polo T-Shirt - Navy (M-XL)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-polo-navy.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-polo-olive": {
+    "product": "Men Polo T-Shirt - Olive (M-XL)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-polo-olive.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-tshirt-grey-graphic": {
+    "product": "Men Graphic T-Shirt - Grey (M-XL)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-tshirt-grey-graphic.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-tshirt-red-sport": {
+    "product": "Men Dry-Fit Sports T-Shirt - Red (S-XL)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-tshirt-red-sport.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-trackpant-black": {
+    "product": "Women Churidar Legging - Black",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-trackpant-black.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-trackpant-navy": {
+    "product": "Men Dry-Fit Track Pants - Navy (M-XL)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-trackpant-navy.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-trackpant-grey": {
+    "product": "Men Cotton Jogger - Grey (M-XL)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-trackpant-grey.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-trousers-olive-cargo": {
+    "product": "Men Cargo Pants - Olive (30-36)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-trousers-olive-cargo.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-kurti-floral": {
+    "product": "Women Floral Kurti (M-XXL)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-kurti-floral.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-kurti-maroon": {
+    "product": "Women Straight Kurti - Maroon (S-XL)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-kurti-maroon.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-tshirt-pink": {
+    "product": "Women Round-Neck T-Shirt - Pink (S-XL)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-tshirt-pink.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-tshirt-black": {
+    "product": "Women Western Top - Black (S-XL)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-tshirt-black.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-tshirt-blue-kids": {
+    "product": "Boys Round-Neck T-Shirt (4-12 yrs)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-tshirt-blue-kids.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-trackpant-red-kids": {
+    "product": "Boys Track Pants (6-14 yrs)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-trackpant-red-kids.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-frock-pink": {
+    "product": "Girls Party Frock (4-12 yrs)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-frock-pink.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-frock-blue-set": {
+    "product": "Girls Top-Capri Set (4-12 yrs)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-frock-blue-set.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-babysuit-sand": {
+    "product": "Baby Baba Suit (0-2 yrs)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-babysuit-sand.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-hoodie-charcoal": {
+    "product": "Men Hoodie - Charcoal (M-XL)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-hoodie-charcoal.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-jacket-navy": {
+    "product": "Men Winter Jacket - Navy (M-XL)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-jacket-navy.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-kurta-cream": {
+    "product": "Men Festive Kurta - Cream (M-XXL)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-kurta-cream.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-shawl-red": {
+    "product": "Women Wool Shawl - Red",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-shawl-red.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-belt-brown": {
+    "product": "Leather Belt - Brown",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-belt-brown.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-socks-grey": {
+    "product": "Cotton Socks Pack of 5",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-socks-grey.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-alter-grey": {
+    "product": "Stitching / Alteration Charge",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-alter-grey.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-jeans-dark-2": {
+    "product": "Men Slim Jeans - Dark Blue (28-36)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-jeans-dark.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-jeans-light-2": {
+    "product": "Men Regular Jeans - Light Blue (30-38)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-jeans-light.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-trackpant-black-2": {
+    "product": "Men Track Pants - Black (M-XL)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-trackpant-black.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
+  },
+  "muftgo-jeans-dark-3": {
+    "product": "Women Slim Jeans - Dark Blue (28-34)",
+    "pack": "textile",
+    "file": "static/images/demo/muftgo-jeans-dark.webp",
+    "source": "Original artwork by MuftGo",
+    "licence": "MuftGo (own work)",
+    "author": "Muftgo"
   }
 }

@@ -6,36 +6,45 @@ with the client's real details on the Shop Settings page before going live)._
 
 ## What you get
 
-Pick **Clothing & textiles** at install (or Demo Data → change industry) and the
-shop is seeded with:
+MuftGo Billing installs **clothing retail only** - the setup screen offers no
+other trade, so a shop can never install the wrong catalogue. Pick sample data
+at install (or Demo Data → reinstall) and the shop is seeded with:
 
-- **7 categories, 49 products** (`api/utils/demoData.js` → `textileDemoData`)
+- **9 categories, 42 products** (`api/utils/demoData.js` → `textileDemoData`)
+- Shirts (5), jeans (4 + 2 women's), t-shirts (6 + 2 women's), track pants &
+  joggers (4), kurtis & tops (4), kids wear (6), winter & festive (4),
+  accessories & services (4) - every type in the sizes it really sells in
 - Pune street-market INR prices with **MRP + cost** (so margin reports work)
-- Size runs + **HSN hints** in each description (garments: 6109/6110 knits,
-  6203/6204/6205/6207 wovens, 5007 silk, 5208 cotton, 6115 hosiery, 6213/6214
-  made-ups; GST typically 5% ≤ Rs.1000, 12% above — confirm with the CA)
-- Units the shop actually sells in: `piece`, `set`, `pack`, `meter`
+- Size runs + **HSN hints** in each description (garments: 6109/6110/6111/6112
+  knits, 6201/6203/6204/6205/6207 wovens, 5007 silk, 5208 cotton, 6115 hosiery,
+  4203 belts, 6214 made-ups; GST typically 5% ≤ Rs.1000, 12% above → confirm
+  with the CA)
+- Units the shop actually sells in: `piece`, `set`, `pack`
   (auto-created in the Units master; alteration charge is a non-stock service)
 
 ## Categories
 
-| Category               | Items | Covers                                                           |
-| ---------------------- | ----- | ---------------------------------------------------------------- |
-| Men's Wear             | 10    | Shirts, tees, jeans, trousers, kurta, vest/brief, lungi          |
-| Women's Ethnic         | 9     | Cotton/silk/nauvari sarees, kurtis, palazzo, leggings, suit sets |
-| Women's Daily Wear     | 6     | Nighty, tops, petticoat, blouse cloth, jeggings, dupatta         |
-| Kids Wear              | 9     | Boys/girls 2–14 yrs, ethnic sets, school uniform, baby suits     |
-| Festive & Wedding      | 6     | Sherwani set, blazer, lehenga, gown, Banarasi, Indo-western      |
-| Winter & Essentials    | 5     | Hoodies, jackets, track pants, shawls, thermals                  |
-| Accessories & Services | 4     | Belt, socks, hankies, alteration charge                          |
+| Category               | Items | Covers                                                        |
+| ---------------------- | ----- | ------------------------------------------------------------- |
+| Men's Shirts           | 5     | Formal, striped, checked, linen, denim (S–XXL)                |
+| Men's Jeans            | 4     | Slim, regular & baggy denim (waist 28–38)                     |
+| Men's T-Shirts         | 6     | Round-neck, polo, graphic, dry-fit (S–XL)                     |
+| Track Pants & Joggers  | 4     | Loop-knit, dry-fit, joggers, cargos                           |
+| Women's Kurtis & Tops  | 4     | Floral/straight kurtis, tees, western tops (S–XXL)            |
+| Women's Jeans & Sarees | 5     | Slim/mom-fit denim, leggings, cotton & silk sarees            |
+| Kids Wear              | 6     | Tees, jeans, track pants, frocks, sets, baba suits (0–14 yrs) |
+| Winter & Festive       | 4     | Hoodies, jackets, kurtas, shawls                              |
+| Accessories & Services | 4     | Lungi, belts, socks, alteration charge                        |
 
 ## Photos
 
-4 products carry real photos from the existing demo manifest
-(T-shirt, lungi, cotton saree, silk saree); the rest get coloured name tiles
-(design choice upstream: a wrong picture reads as fact, an absent one reads as
-absent). To add photos later, drop `.webp` files in
-`frontend/static/images/demo/` and extend `credits.json` + `attachImages()`.
+**All 42 products carry an image** - 4 real photographs (round-neck tee,
+lungi, cotton saree, silk saree) plus 35 original MuftGo garment icons
+(one per type-and-colour, generated offline - no licensing strings attached).
+Mapping lives in `frontend/static/images/demo/credits.json` and is applied by
+`attachImages()` in `api/utils/demoData.js`: an image exists and is used, or
+the product keeps its coloured name tile. To swap a photo later, drop a
+`.webp` in `frontend/static/images/demo/` and point that product's entry at it.
 
 ## After install (client handover checklist)
 
