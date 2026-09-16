@@ -14,8 +14,11 @@ const signToken = (id) => {
 
 const createSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
+  /* Unset expiry days default to 30 (same as config/environment.js) instead
+     of an Invalid Date: a missing variable must never break every login. */
+  const cookieDays = Number(process.env.JWT_COOKIE_EXPIRES_IN) || 30;
   const cookieOptions = authCookieOptions({
-    expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+    expires: new Date(Date.now() + cookieDays * 24 * 60 * 60 * 1000),
   });
 
   // Remove password from output
@@ -206,9 +209,10 @@ const createAndSendToken = async (user, statusCode, res, req) => {
 
   console.log('=======================\n');
 
-  // Set cookie
+  // Set cookie (unset expiry days default to 30, same as createSendToken).
+  const cookieDays = Number(process.env.JWT_COOKIE_EXPIRES_IN) || 30;
   const cookieOptions = authCookieOptions({
-    expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+    expires: new Date(Date.now() + cookieDays * 24 * 60 * 60 * 1000),
   });
 
   res.cookie('jwt', token, cookieOptions);

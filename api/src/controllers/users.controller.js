@@ -7,7 +7,10 @@ const UserModel = require('../models/user.model');
 const Branch = require('../models/branch.model');
 const bcrypt = require('bcryptjs');
 const { createSendToken, signLegacyToken, jwtLifetimeSeconds } = require('../middleware/auth');
-const httpStatus = require('http-status');
+/* http-status v2 ships its codes under .default when required from CJS;
+   v1 exposes them at the top level. Either layout works through this. */
+const _httpStatus = require('http-status');
+const httpStatus = _httpStatus.default || _httpStatus;
 const { AppError } = require('../utils/appError');
 const { ObjectId } = require('mongodb');
 const BaseModel = require('../models/base.model');

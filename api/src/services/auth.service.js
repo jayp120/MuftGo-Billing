@@ -1,4 +1,7 @@
-const httpStatus = require('http-status');
+/* http-status v2 ships its codes under .default when required from CJS;
+   v1 exposes them at the top level. Either layout works through this. */
+const _httpStatus = require('http-status');
+const httpStatus = _httpStatus.default || _httpStatus;
 const { User } = require('../models');
 // Token was used by logout and refreshAuth without ever being imported, so both
 // threw ReferenceError instead of doing their work.

@@ -6,7 +6,10 @@ const { AppError } = require('../utils/appError');
 // imported, so an invalid token produced a ReferenceError instead of a 401.
 const { UnauthorizedError } = require('./errorHandler');
 const { currentSecret } = require('../db/tenant-context');
-const httpStatus = require('http-status');
+/* http-status v2 ships its codes under .default when required from CJS;
+   v1 exposes them at the top level. Either layout works through this. */
+const _httpStatus = require('http-status');
+const httpStatus = _httpStatus.default || _httpStatus;
 const tokenService = require('../services/token.service');
 require('../config/tokens');
 const { findUserByIdentifier } = require('../utils/findUserByIdentifier');
@@ -130,8 +133,11 @@ const signLegacyToken = (user, req, branchId) => {
 // Create and send token, set cookie
 const createSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
+  /* Unset expiry days default to 30 (same as config/environment.js) instead
+     of an Invalid Date: a missing variable must never break every login. */
+  const cookieDays = Number(process.env.JWT_COOKIE_EXPIRES_IN) || 30;
   const cookieOptions = authCookieOptions({
-    expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+    expires: new Date(Date.now() + cookieDays * 24 * 60 * 60 * 1000),
   });
 
   // Send JWT via HTTP-only cookie so browser automatically
