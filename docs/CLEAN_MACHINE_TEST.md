@@ -27,8 +27,8 @@ Record the result in the release checklist or release issue when done.
 ## 1. Install
 
 - [ ] Copy the installer over and run it
-- [ ] **Note exactly what Windows says.** Unsigned builds show *Windows
-      protected your PC* — record whether *More info → Run anyway* is needed
+- [ ] **Note exactly what Windows says.** Unsigned builds show _Windows
+      protected your PC_ — record whether _More info → Run anyway_ is needed
 - [ ] Install completes without an error dialog
 - [ ] A desktop shortcut and Start menu entry appear
 
@@ -41,7 +41,7 @@ repeats — extracting the database, deriving ports, generating credentials.
 - [ ] The loading screen shows progress rather than hanging
 - [ ] It reaches the setup wizard **without needing a restart**
 - [ ] Time it. Record how long. Anything over five minutes needs investigating
-- [ ] Check `%APPDATA%\posnic\app.log` for errors even if it looked fine
+- [ ] Check `%APPDATA%\muftgo-billing\app.log` for errors even if it looked fine
 
 ## 3. Setup
 
@@ -82,8 +82,8 @@ local API rather than embedded in the page, so this is worth doing carefully.
 - [ ] **Backup Manager → Backup Now.** It completes and the folder appears
 - [ ] Make another sale, so there is something to lose
 - [ ] Restore the backup. The second sale is gone, the first is there
-- [ ] Set up the scheduled task: *Settings → Backups when Posnic is closed →
-      Show me the command*
+- [ ] Set up the scheduled task: _Settings → Backups when Posnic is closed →
+      Show me the command_
 - [ ] Close Posnic entirely
 - [ ] Run the task: `schtasks /Run /TN "Posnic Backup"`
 - [ ] `schtasks /Query /TN "Posnic Backup" /FO LIST /V | findstr "Last Result"`
@@ -104,10 +104,10 @@ that is a finding.
 Needs a published release newer than the installed build. If there is not one,
 say so and leave this section unticked rather than skipping it silently.
 
-- [ ] *Updates* shows the current version
+- [ ] _Updates_ shows the current version
 - [ ] **Check Now** finds the newer release
 - [ ] The release notes are shown, and readable
-- [ ] Turn *Check for updates automatically* off; reopen the window; confirm it
+- [ ] Turn _Check for updates automatically_ off; reopen the window; confirm it
       does **not** check on its own
 - [ ] Turn it back on
 - [ ] Let the update download
@@ -118,7 +118,7 @@ say so and leave this section unticked rather than skipping it silently.
 ## 9. Rollback
 
 - [ ] Turn automatic updates **off** first, or it will update straight back
-- [ ] *Updates → Going back to an earlier release → Open the releases page*
+- [ ] _Updates → Going back to an earlier release → Open the releases page_
 - [ ] Download the previous installer and run it **over the top** — do not
       uninstall first
 - [ ] It installs, opens, and the data is still there
@@ -127,10 +127,7 @@ say so and leave this section unticked rather than skipping it silently.
 ## 10. Reinstall and uninstall
 
 - [ ] Reinstall the current version over the top. Data survives
-- [ ] Uninstall, choosing to **keep** data. Confirm these still exist:
-      - `%APPDATA%\posnic\mongodb`
-      - `%APPDATA%\posnic\.mongodb-credentials.json`
-      - `Documents\Posnic-Backups`
+- [ ] Uninstall, choosing to **keep** data. Confirm these still exist: - `%APPDATA%\posnic\mongodb` - `%APPDATA%\posnic\.mongodb-credentials.json` - `Documents\Posnic-Backups`
 - [ ] Reinstall. The existing shop and its sales come back
 - [ ] Uninstall again, this time choosing to **delete** data. Confirm those
       paths are gone
@@ -144,7 +141,7 @@ clean pass, the log excerpt. "Mostly worked" is not a result.
 
 Attach:
 
-- `%APPDATA%\posnic\app.log` from the whole run
+- `%APPDATA%\muftgo-billing\app.log` from the whole run
 - The Windows version and build number
 - Whether the installer was signed
 - Timings for first launch and for the update

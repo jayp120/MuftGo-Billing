@@ -13,12 +13,12 @@ that has to be reachable to make a sale.
 
 So the disasters split cleanly:
 
-| What fails | Can the shop trade? | Whose recovery |
-|---|---|---|
-| Our servers | **Yes** | Ours, and it does not block trade |
-| The shop's internet | **Yes** | None needed |
-| The shop's computer | No | Theirs, from backup |
-| The shop's disk | No | Theirs, from backup |
+| What fails          | Can the shop trade? | Whose recovery                    |
+| ------------------- | ------------------- | --------------------------------- |
+| Our servers         | **Yes**             | Ours, and it does not block trade |
+| The shop's internet | **Yes**             | None needed                       |
+| The shop's computer | No                  | Theirs, from backup               |
+| The shop's disk     | No                  | Theirs, from backup               |
 
 Only two rows stop a shop trading, and both are local. That is the design, and
 it is why the numbers below are as good as they are.
@@ -32,12 +32,12 @@ it is why the numbers below are as good as they are.
 
 ### The shop's own data, local edition
 
-| Scenario | RPO | RTO | Depends on |
-|---|---|---|---|
-| Bad data change, restore from backup | Up to 24 h (default daily) | 15–30 min | A backup existing |
-| Computer fails, spare available | Up to 24 h | 1–2 h | An off-machine backup |
-| Computer fails, no spare | Up to 24 h | Hours to days | Buying hardware |
-| Disk fails, backups on the same disk | **Total loss** | — | Nothing to recover from |
+| Scenario                             | RPO                        | RTO           | Depends on              |
+| ------------------------------------ | -------------------------- | ------------- | ----------------------- |
+| Bad data change, restore from backup | Up to 24 h (default daily) | 15–30 min     | A backup existing       |
+| Computer fails, spare available      | Up to 24 h                 | 1–2 h         | An off-machine backup   |
+| Computer fails, no spare             | Up to 24 h                 | Hours to days | Buying hardware         |
+| Disk fails, backups on the same disk | **Total loss**             | —             | Nothing to recover from |
 
 **That last row is the one that matters**, and it is the common case. The
 default backup folder is `Documents\Posnic-Backups` — the same disk as the data.
@@ -49,10 +49,10 @@ shop's decisions, and they are the only ones that change these numbers.
 
 ### Posnic Cloud
 
-| Scenario | RPO | RTO | Status |
-|---|---|---|---|
-| Service outage, no data loss | 0 | Target 4 h | **Not yet measured** |
-| Data loss in the hosted database | Target 1 h | Target 8 h | **Not yet measured** |
+| Scenario                            | RPO         | RTO         | Status               |
+| ----------------------------------- | ----------- | ----------- | -------------------- |
+| Service outage, no data loss        | 0           | Target 4 h  | **Not yet measured** |
+| Data loss in the hosted database    | Target 1 h  | Target 8 h  | **Not yet measured** |
 | Complete loss of the hosting region | Target 24 h | Target 48 h | **Not yet measured** |
 
 **These are intentions, not commitments.** They have not been measured by a
@@ -99,12 +99,12 @@ Every update takes a forced backup first and **cancels the update if that backup
 fails**, so there is always a copy from immediately before the version that
 caused the problem.
 
-### When Posnic will not start at all
+### When MuftGo Billing will not start at all
 
 1. Restart the computer. It clears a stuck database process more often than
    anything else.
-2. Read the log: `%APPDATA%\posnic\app.log`
-3. The data is in `%APPDATA%\posnic\mongodb` — if the application is broken but
+2. Read the log: `%APPDATA%\muftgo-billing\app.log`
+3. The data is in `%APPDATA%\muftgo-billing\mongodb` — if the application is broken but
    that folder is intact, a reinstall over the top keeps it
 4. If the folder is damaged, restore from backup
 
@@ -133,11 +133,11 @@ For Posnic Cloud, in order:
 
 An untested recovery plan is a wish.
 
-| Drill | How often | Last done |
-|---|---|---|
-| Restore a shop backup onto a clean machine | Every release | **Never** |
-| Restore a Cloud backup into a scratch environment | Quarterly | **Never** |
-| Walk a total-machine-loss recovery end to end | Annually | **Never** |
+| Drill                                             | How often     | Last done |
+| ------------------------------------------------- | ------------- | --------- |
+| Restore a shop backup onto a clean machine        | Every release | **Never** |
+| Restore a Cloud backup into a scratch environment | Quarterly     | **Never** |
+| Walk a total-machine-loss recovery end to end     | Annually      | **Never** |
 
 **Every row says never.** That is the honest state, and it is why the Cloud
 numbers above are targets rather than measurements. The first drill is the
@@ -150,7 +150,7 @@ reveals that backups were never as restorable as everyone assumed.
 
 1. Leave automatic backups on
 2. Set up the Windows scheduled task, so backups happen when the till is off —
-   *Backup Manager → Settings → Backups when Posnic is closed*
+   _Backup Manager → Settings → Backups when Posnic is closed_
 3. Get one copy **off the machine** — USB drive, another computer, or a synced
    folder
 4. **Restore one backup onto another computer once**, so you have done it before

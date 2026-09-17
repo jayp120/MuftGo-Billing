@@ -11,17 +11,17 @@ contribution too.
 
 Start with one small, reviewable change.
 
-| I want to help with | Good first place |
-|---|---|
-| A small bug or test | Issues labelled [`good first issue`](https://github.com/Posnic/POS/labels/good%20first%20issue) |
-| Translation work | [#32 Language pack contributions](https://github.com/Posnic/POS/issues/32) |
-| Translation tooling | [#31 Localization framework](https://github.com/Posnic/POS/issues/31) |
-| India e-invoicing | [#29 India GST e-invoice support](https://github.com/Posnic/POS/issues/29) |
-| GST reports and exports | [#30 India GST return preparation](https://github.com/Posnic/POS/issues/30) |
-| In-app help or AI assistant | [#33 In-app helper and AI assistant](https://github.com/Posnic/POS/issues/33) |
-| External integrations | [#34 Optional connector framework](https://github.com/Posnic/POS/issues/34) |
-| Hardware testing | [#12 Hardware evidence](https://github.com/Posnic/POS/issues/12) |
-| Bigger roadmap work | [#35 Contributor roadmap](https://github.com/Posnic/POS/issues/35) |
+| I want to help with         | Good first place                                                                                |
+| --------------------------- | ----------------------------------------------------------------------------------------------- |
+| A small bug or test         | Issues labelled [`good first issue`](https://github.com/Posnic/POS/labels/good%20first%20issue) |
+| Translation work            | [#32 Language pack contributions](https://github.com/Posnic/POS/issues/32)                      |
+| Translation tooling         | [#31 Localization framework](https://github.com/Posnic/POS/issues/31)                           |
+| India e-invoicing           | [#29 India GST e-invoice support](https://github.com/Posnic/POS/issues/29)                      |
+| GST reports and exports     | [#30 India GST return preparation](https://github.com/Posnic/POS/issues/30)                     |
+| In-app help or AI assistant | [#33 In-app helper and AI assistant](https://github.com/Posnic/POS/issues/33)                   |
+| External integrations       | [#34 Optional connector framework](https://github.com/Posnic/POS/issues/34)                     |
+| Hardware testing            | [#12 Hardware evidence](https://github.com/Posnic/POS/issues/12)                                |
+| Bigger roadmap work         | [#35 Contributor roadmap](https://github.com/Posnic/POS/issues/35)                              |
 
 For anything non-trivial, comment on the issue before opening a large PR. A
 small design note saves everybody time.
@@ -93,28 +93,28 @@ built, and starts the bundled MongoDB. Ctrl+C stops all of it.
 
 Development defaults:
 
-| Service | Default |
-|---|---|
-| Local API | `http://127.0.0.1:42590` |
-| Local MongoDB | `mongodb://127.0.0.1:47590` |
-| Windows log | `%APPDATA%\posnic\app.log` |
-| macOS log | `~/Library/Application Support/posnic/app.log` |
-| Linux log | `~/.config/posnic/app.log` |
+| Service       | Default                                                |
+| ------------- | ------------------------------------------------------ |
+| Local API     | `http://127.0.0.1:42590`                               |
+| Local MongoDB | `mongodb://127.0.0.1:47590`                            |
+| Windows log   | `%APPDATA%\muftgo-billing\app.log`                     |
+| macOS log     | `~/Library/Application Support/muftgo-billing/app.log` |
+| Linux log     | `~/.config/muftgo-billing/app.log`                     |
 
 If the app does not open, read the log before changing code. It usually names
 the failing file, port, or dependency.
 
 ## Where code lives
 
-| Area | Path |
-|---|---|
-| Desktop shell, startup, packaging | `src/` |
-| App screens and browser UI | `frontend/` |
-| Local API | `api/src/` |
-| API tests | `api/tests/` |
-| Desktop/source tests | `tests/` |
-| Release and packaging scripts | `scripts/` |
-| Documentation | `docs/` and `.github/` |
+| Area                              | Path                   |
+| --------------------------------- | ---------------------- |
+| Desktop shell, startup, packaging | `src/`                 |
+| App screens and browser UI        | `frontend/`            |
+| Local API                         | `api/src/`             |
+| API tests                         | `api/tests/`           |
+| Desktop/source tests              | `tests/`               |
+| Release and packaging scripts     | `scripts/`             |
+| Documentation                     | `docs/` and `.github/` |
 
 The usual backend shape is:
 
@@ -131,17 +131,17 @@ machines that cannot be force-updated.
 Run the smallest useful test while developing, then run the broader gate before
 opening the PR.
 
-| Change type | Useful checks |
-|---|---|
-| API behavior | `cd api && npm test -- tests/unit/path/to/test.js` |
-| Full API gate | `cd api && npm test` |
-| Desktop or frontend behavior | `npm test` from repo root |
-| Startup/auth behavior | `npm run test:auth` |
-| Translation work | `node --test tests/i18n.test.js` |
-| Packaging allowlist changes | `npm run check:modules` |
-| API route/docs changes | `cd api && npm run docs:check` |
-| API lint | `cd api && npm run lint` |
-| Installer/package changes | `npm run build:fast` |
+| Change type                  | Useful checks                                      |
+| ---------------------------- | -------------------------------------------------- |
+| API behavior                 | `cd api && npm test -- tests/unit/path/to/test.js` |
+| Full API gate                | `cd api && npm test`                               |
+| Desktop or frontend behavior | `npm test` from repo root                          |
+| Startup/auth behavior        | `npm run test:auth`                                |
+| Translation work             | `node --test tests/i18n.test.js`                   |
+| Packaging allowlist changes  | `npm run check:modules`                            |
+| API route/docs changes       | `cd api && npm run docs:check`                     |
+| API lint                     | `cd api && npm run lint`                           |
+| Installer/package changes    | `npm run build:fast`                               |
 
 Current test policy:
 
@@ -252,6 +252,7 @@ Before opening a PR:
    git fetch origin develop
    git checkout -b my-change origin/develop
    ```
+
 2. Keep one concern per PR.
 3. Link the issue and state which acceptance criteria or PR slice is covered.
 4. Add or update a focused test when code behavior changes.

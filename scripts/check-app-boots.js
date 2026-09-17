@@ -33,7 +33,7 @@ const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
 const target = process.argv[2] || path.join(ROOT, 'dist', 'win-unpacked');
-const exe = path.join(target, 'Posnic.exe');
+const exe = path.join(target, 'MuftGo Billing.exe');
 
 /* Long enough for a cold first boot on a slow machine - MongoDB has to create
    its data directory - and short enough that a hang is still a failed build
@@ -41,7 +41,7 @@ const exe = path.join(target, 'Posnic.exe');
 const BOOT_TIMEOUT_MS = Number(process.env.POSNIC_BOOT_TIMEOUT_MS || 180_000);
 const PORT = Number(process.env.POSNIC_APP_PORT || 5555);
 
-const logPath = path.join(os.homedir(), 'AppData', 'Roaming', 'posnic', 'app.log');
+const logPath = path.join(os.homedir(), 'AppData', 'Roaming', 'muftgo-billing', 'app.log');
 
 const say = (m) => console.log(m);
 /*
@@ -117,7 +117,7 @@ function newLogLines() {
 /*
  * ANOTHER COPY ALREADY RUNNING IS NOT A FAILED BOOT.
  *
- * Posnic takes a single-instance lock. Start a second copy while one is open
+ * MuftGo Billing takes a single-instance lock. Start a second copy while one
  * and the new process exits 0 immediately, in silence - which is
  * indistinguishable from the silent non-start this script exists to catch, and
  * on a developer's machine it is by far the commoner of the two. It reported a
@@ -129,10 +129,10 @@ function newLogLines() {
 if (process.platform === 'win32') {
   try {
     const { execSync } = require('child_process');
-    const out = execSync('tasklist /FI "IMAGENAME eq Posnic.exe" /NH', { encoding: 'utf8', timeout: 15000 });
-    if (/Posnic\.exe/i.test(out)) {
+    const out = execSync('tasklist /FI "IMAGENAME eq MuftGo Billing.exe" /NH', { encoding: 'utf8', timeout: 15000 });
+    if (/MuftGo Billing\.exe/i.test(out)) {
       say('');
-      say('  SKIPPED: Posnic is already running, and it holds the single-instance lock.');
+      say('  SKIPPED: MuftGo Billing is already running, and it holds the single-instance lock.');
       say('  A second copy exits immediately, which would read here as a failed boot.');
       say('  Close it and run this again.');
       say('');
@@ -159,8 +159,8 @@ say(`  starting ${exe}`);
  * ELECTRON_RUN_AS_NODE IS REMOVED, NOT BLANKED.
  *
  * Electron tests whether the variable is PRESENT, not what it says. Setting it
- * to "" in a workflow still defines it on Windows, so Posnic.exe started as
- * plain Node, hit
+ * to "" in a workflow still defines it on Windows, so MuftGo Billing.exe
+ * started as plain Node, hit
  *
  *   Assertion failed: (isolate_data->snapshot_data()) != nullptr
  *
@@ -208,7 +208,7 @@ child.on('exit', (code) => {
       ? [
         '',
         '    Exiting 0 within seconds usually means one of two things:',
-        '    ELECTRON_RUN_AS_NODE is set in this shell, which makes Posnic.exe',
+        '    ELECTRON_RUN_AS_NODE is set in this shell, which makes MuftGo Billing.exe',
         '    run as plain Node; or another copy holds the single-instance lock.',
       ].join('\n')
       : '';

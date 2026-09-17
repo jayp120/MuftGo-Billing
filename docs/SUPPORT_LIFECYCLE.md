@@ -11,11 +11,11 @@ picture rather than an optimistic one.
 
 ## Versions
 
-| Line | Support |
-|---|---|
+| Line               | Support                                         |
+| ------------------ | ----------------------------------------------- |
 | **Latest release** | Fixes, security fixes, and answers to questions |
 | **Previous minor** | Security fixes only, until the next minor ships |
-| **Anything older** | Nothing. Upgrade. |
+| **Anything older** | Nothing. Upgrade.                               |
 
 There is one supported line at a time. That is what a project this size can
 honestly maintain, and a longer list that nobody backports to would be a
@@ -40,20 +40,20 @@ working days, with an assessment of severity and an intended fix date.
 
 **A data-loss bug** — anything that loses, corrupts or miscounts sales, stock or
 money — is the highest non-security priority. Report it with the log
-(`%APPDATA%\posnic\app.log`) and, if you can, a backup taken before it happened.
+(`%APPDATA%\muftgo-billing\app.log`) and, if you can, a backup taken before it happened.
 
-**Everything else** goes in [issues](https://github.com/Posnic/POS/issues) and
+**Everything else** goes in [issues](https://github.com/jayp120/MuftGo-Billing/issues) and
 is worked on in whatever order makes sense. No timescale is promised.
 
 ---
 
 ## Platforms
 
-| Platform | State |
-|---|---|
-| Windows 10 and 11, 64-bit | Supported and tested |
-| macOS, Linux | Built and published; tested far less |
-| Windows 8.1 and earlier, 32-bit | Not supported |
+| Platform                        | State                                |
+| ------------------------------- | ------------------------------------ |
+| Windows 10 and 11, 64-bit       | Supported and tested                 |
+| macOS, Linux                    | Built and published; tested far less |
+| Windows 8.1 and earlier, 32-bit | Not supported                        |
 
 Electron and the bundled MongoDB set the floor. When either drops a platform,
 so does Posnic, and that lands in a major release.
@@ -92,10 +92,10 @@ but no uptime percentage or repair time is promised.
 
 ## Support hours
 
-| | |
-|---|---|
-| **Business hours** | Monday to Saturday, 10:00–19:00 IST |
-| **Monitoring** | During business hours |
+|                    |                                        |
+| ------------------ | -------------------------------------- |
+| **Business hours** | Monday to Saturday, 10:00–19:00 IST    |
+| **Monitoring**     | During business hours                  |
 | **Urgent support** | **On call, 24 hours a day, every day** |
 
 **Urgent means the shop cannot trade** — the till will not open, sales cannot be

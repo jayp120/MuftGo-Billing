@@ -234,17 +234,17 @@ you are on Cloud, skip the rest of this section.
 Windows has a built-in Task Scheduler. One command tells it to run Posnic's
 backup every night, whether or not anyone has opened the app.
 
-**Posnic writes the exact command for you**, with the real paths already filled
-in — _Backup Manager → Settings → Backups when Posnic is closed → Show me the
+**MuftGo Billing writes the exact command for you**, with the real paths already filled
+in — _Backup Manager → Settings → Backups when MuftGo Billing is closed → Show me the
 command_. It looks like this:
 
 ```
-schtasks /Create /TN "Posnic Backup" /SC DAILY /ST 22:00 ^
-  /TR "\"C:\Program Files\Posnic\Posnic.exe\" --scheduled-task=backup" /F
+schtasks /Create /TN "MuftGo Billing Backup" /SC DAILY /ST 22:00 ^
+  /TR "\"%LOCALAPPDATA%\Programs\MuftGo Billing\MuftGo Billing.exe\" --scheduled-task=backup" /F
 ```
 
 Copy it from the Backup Manager rather than typing it from here — the path to
-Posnic depends on where you installed it, and the command must match your
+MuftGo Billing depends on where you installed it, and the command must match your
 machine.
 
 1. Right-click **Command Prompt** → _Run as administrator_

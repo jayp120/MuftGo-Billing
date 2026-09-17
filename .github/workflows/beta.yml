@@ -179,7 +179,7 @@ jobs:
         #
         # Setting it to empty DEFINES it, and Electron tests for the variable
         # being present rather than for what it says - so that line made
-        # Posnic.exe run as plain Node, abort on a failed snapshot assertion,
+        # MuftGo Billing.exe run as plain Node, abort on a failed snapshot assertion,
         # and this step blame the application. check-app-boots.js deletes the
         # variable from the child's environment instead, which is right whether
         # it is run here or on somebody's machine.

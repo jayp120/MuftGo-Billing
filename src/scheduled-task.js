@@ -14,7 +14,7 @@
  *
  * The job itself runs inside main.js, launched as:
  *
- *     Posnic.exe --scheduled-task=backup
+ *     MuftGo Billing.exe --scheduled-task=backup
  *
  * and not as a script under ELECTRON_RUN_AS_NODE, which was the first attempt.
  * Under that flag require('electron') fails, so safeStorage is unreachable -
@@ -46,7 +46,11 @@ const TASKS = ['backup'];
 function userDataPath() {
   if (process.env.POSNIC_USER_DATA) return process.env.POSNIC_USER_DATA;
 
-  const name = 'posnic';
+  /* The name from package.json - the same answer Electron's
+     app.getPath('userData') gives the running app. A hardcoded name here
+     silently points the scheduled-task instructions at another product's
+     folder the day the package is renamed. */
+  const name = require('../package.json').name || 'muftgo-billing';
   if (process.platform === 'win32') {
     return path.join(process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming'), name);
   }
@@ -73,7 +77,7 @@ function describe({ task = 'backup', frequency = 'daily', time = '22:00' } = {})
     throw new Error(`unknown task "${task}"; known tasks: ${TASKS.join(', ')}`);
   }
 
-  /* Posnic.exe in a packaged build, node.exe from a checkout. Either way it is
+  /* MuftGo Billing.exe in a packaged build, node.exe from a checkout. Either way it is
      the right answer for the machine it is read on. */
   const runner = process.execPath;
   const [rawHour, rawMinute] = String(time).split(':');

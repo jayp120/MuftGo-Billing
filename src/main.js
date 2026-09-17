@@ -89,7 +89,7 @@ if (!hasSingleInstanceLock) {
 }
 
 /*
- * posnic:// deep links ("Open my POS" on the website).
+ * muftgo-billing:// deep links ("Open my POS" on the website).
  *
  * Only from a packaged build. A development run registers process.execPath,
  * which is electron.exe - so the browser then asks "Open Electron?" and names
@@ -100,14 +100,14 @@ if (!hasSingleInstanceLock) {
  * The installer registers the scheme properly through build.protocols in
  * package.json, which is where a shop's machine gets it. This line is for the
  * case where the app has been moved or the registration lost, and it can only
- * ever point at a real installed Posnic.
+ * ever point at a real installed MuftGo Billing.
  *
  * A second launch via the protocol lands in the existing second-instance
  * handler, which focuses the window; a cold start just opens the app normally.
  */
 try {
   if (app.isPackaged) {
-    app.setAsDefaultProtocolClient('posnic');
+    app.setAsDefaultProtocolClient('muftgo-billing');
   }
 } catch (err) {
   console.log('[Main] protocol registration skipped:', err.message);
@@ -608,7 +608,7 @@ function focusPrimaryWindow() {
   mainWindow.focus();
   mainWindow.setAlwaysOnTop(false);
   pendingSecondInstanceFocus = false;
-  console.info('[Main] Existing Posnic window focused');
+  console.info('[Main] Existing MuftGo Billing window focused');
 }
 
 if (hasSingleInstanceLock) {

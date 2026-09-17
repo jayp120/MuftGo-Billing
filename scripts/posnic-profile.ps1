@@ -20,11 +20,11 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$exe = Join-Path $env:LOCALAPPDATA 'Programs\Posnic\Posnic.exe'
+$exe = Join-Path $env:LOCALAPPDATA 'Programs\MuftGo Billing\MuftGo Billing.exe'
 $root = Join-Path $env:LOCALAPPDATA 'PosnicProfiles'
 
 if ($List) {
-  Write-Host "Default profile: $env:APPDATA\Posnic"
+  Write-Host "Default profile: $env:APPDATA\muftgo-billing"
   if (Test-Path $root) {
     Get-ChildItem $root -Directory | ForEach-Object {
       $data = Join-Path $_.FullName 'mongodb\data'
