@@ -250,7 +250,11 @@ jobs:
             -o -name '*.AppImage' -o -name '*.deb' -o -name 'latest*.yml' \
             -o -name '*.blockmap' \) -exec mv {} release/ \;
           cd release
-          sha256sum $(ls | grep -vE 'latest.*\.yml$|\.blockmap$') > SHA256SUMS.txt
+          # Piped through tr/xargs -0: installer names carry spaces (the
+          # product name), which $(...) word-splitting would break into
+          # bogus arguments. (ls runs before the redirect creates
+          # SHA256SUMS.txt, so the checksum file never lists itself.)
+          ls | grep -vE 'latest.*\.yml$|\.blockmap$' | tr '\n' '\0' | xargs -0 sha256sum > SHA256SUMS.txt
           echo "Publishing:"; ls -lh
 
       # Test builds are downloadable executables too. Attest only the exact

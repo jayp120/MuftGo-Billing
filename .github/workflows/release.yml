@@ -11,7 +11,7 @@ name: Release
 
 on:
   push:
-    tags: ['v*']
+    tags: ["v*"]
   workflow_dispatch:
     inputs:
       tag:
@@ -19,7 +19,7 @@ on:
         required: true
 
 permissions:
-  contents: write   # needed to create the release and upload assets
+  contents: write # needed to create the release and upload assets
 
 jobs:
   # A tag that fails its own tests should never reach a download page.
@@ -87,8 +87,8 @@ jobs:
         # That command refuses to publish anything unsigned, untimestamped, or
         # whose latest.yml does not match the installer beside it.
         include:
-          - { os: macos-latest,   name: macOS,   flag: '--mac' }
-          - { os: ubuntu-latest,  name: Linux,   flag: '--linux --x64' }
+          - { os: macos-latest, name: macOS, flag: "--mac" }
+          - { os: ubuntu-latest, name: Linux, flag: "--linux --x64" }
     runs-on: ${{ matrix.os }}
     # secrets cannot appear in step-level `if:` expressions (GitHub refuses
     # the whole file, silently, as a 0-second startup failure) - so their
@@ -100,7 +100,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: '${{ inputs.tag || github.ref }}'
+          ref: "${{ inputs.tag || github.ref }}"
           submodules: recursive
 
       - uses: actions/setup-node@v7
@@ -314,7 +314,7 @@ jobs:
       ASSET_SIGNING_KEY: ${{ secrets.POSNIC_ASSET_SIGNING_KEY }}
     steps:
       - uses: actions/checkout@v7
-        with: { ref: '${{ inputs.tag || github.ref }}' }
+        with: { ref: "${{ inputs.tag || github.ref }}" }
 
       - uses: actions/download-artifact@v8
         with: { path: artifacts }
@@ -354,7 +354,11 @@ jobs:
           # own hashes for the updater, and a blockmap or the release manifest is an
           # implementation detail, so listing them would only add noise to the thing
           # the release notes tell people to check.
-          sha256sum $(ls | grep -vE 'latest.*\.yml$|\.blockmap$|release-manifest\.json$|asset-manifest\.json$') > SHA256SUMS.txt
+          # Piped through tr/xargs -0: installer names carry spaces (the
+          # product name), which $(...) word-splitting would break into
+          # bogus arguments. (ls runs before the redirect creates
+          # SHA256SUMS.txt, so the checksum file never lists itself.)
+          ls | grep -vE 'latest.*\.yml$|\.blockmap$|release-manifest\.json$|asset-manifest\.json$' | tr '\n' '\0' | xargs -0 sha256sum > SHA256SUMS.txt
           echo "Publishing:"; ls -lh
 
       # Bind every package and package SBOM named in SHA256SUMS.txt to this
@@ -387,14 +391,14 @@ jobs:
             *)
               cat > release/NOTES.md <<POSNIC_STABLE
           ## Posnic ${TAG}
-          
+
           A stable release. Every installer below is signed by a publisher your
           operating system can check for itself - how, per platform, next.
           POSNIC_STABLE
               ;;
           esac
           cat >> release/NOTES.md <<'POSNIC_COMMON'
-          
+
           ### About the installers
 
           - **Windows** is signed and timestamped. The installer names its
@@ -451,7 +455,7 @@ jobs:
           tag_name: ${{ inputs.tag || github.ref_name }}
           files: release/*
           generate_release_notes: true
-          draft: true          # a human decides when it goes public
+          draft: true # a human decides when it goes public
           # A pre-release by default, until the installers are signed: with
           # allowPrerelease false, electron-updater ignores pre-releases, so no
           # existing installation is pushed a beta it did not ask for.
