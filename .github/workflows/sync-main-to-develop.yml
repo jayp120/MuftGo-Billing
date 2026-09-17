@@ -36,7 +36,19 @@ jobs:
       - name: Is develop actually behind?
         id: check
         run: |
-          git fetch origin main develop
+          git fetch origin main
+          # This repository currently ships from main alone - there is no
+          # develop branch on the remote. Fetching it would fail the run
+          # with "couldn't find remote ref develop" on every push to main,
+          # which reads as breakage rather than as the intended state.
+          # Skip cleanly so the failure mails stop; if develop is ever
+          # recreated this step starts comparing again with no further change.
+          if ! git ls-remote --exit-code --heads origin develop >/dev/null 2>&1; then
+            echo "behind=0" >> "$GITHUB_OUTPUT"
+            echo "there is no develop branch on the remote - nothing to sync" | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          git fetch origin develop
           # Commits on main that develop does not have. Zero is the normal
           # case - after a release develop already contains everything.
           BEHIND=$(git rev-list --count origin/develop..origin/main)

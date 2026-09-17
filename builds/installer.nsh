@@ -1,10 +1,26 @@
 ; MuftGo Billing - Custom NSIS Installer Script (based on Posnic POS)
 ; This script is included during the installation process
 
-; Ultra-fast installation like VSCode/Windsurf
-SetCompressor /SOLID lzma
-SetCompressorDictSize 32
-SetDatablockOptimize on
+; No compressor override here, deliberately. electron-builder already compresses
+; the payload into a 7z (non-solid, so differential updates stay small), and
+; with "compression": "store" its header tells NSIS to embed that archive
+; uncompressed (SetCompress off). A second pass here - e.g. SetCompressor
+; /SOLID lzma - squeezes ~1MB out of the 7z by finding matches across its
+; internal block boundaries, which sounds free until two things happen:
+;
+; 1. Installs get SLOWER, not faster: a solid block is decompressed to a
+;    temporary file before a single byte reaches its destination, using more
+;    disk and RAM on the till for a 0.6% saving.
+; 2. The stock electron-builder post-build check requires the installer to be
+;    at least as large as the embedded archive(s). With a solid second pass
+;    that invariant is content-dependent: it held for v1.6.1-muftgo.1 and
+;    broke on the next catalogue commit, failing every Windows build with
+;    "Generated installer is smaller than the embedded archive(s)". With
+;    SetCompress off the invariant holds by construction - installer equals
+;    archive plus a fixed overhead - so it cannot flip on a future commit.
+;
+; If download size ever matters more than this, compress the 7z harder (the
+; top-level compression option) rather than compressing twice.
 
 ; The file list stays visible - a shop watching an installer that says nothing
 ; for two minutes assumes it has hung.
