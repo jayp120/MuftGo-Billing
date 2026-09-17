@@ -47,11 +47,14 @@ test('/order and /menu are mounted before the root API router', () => {
 
   const orderAt = src.indexOf("app.use('/order'");
   const menuAt = src.indexOf("app.use('/menu'");
-  const rootApiAt = src.indexOf("app.use('/', apiRouter)");
+  /* The root mount carries middleware (currently the activation gate) between
+     the path and the router, so match the shape rather than a literal. */
+  const rootApiMatch = /app\.use\('\/',[\s\S]*?apiRouter\)/.exec(src);
 
   assert.ok(orderAt !== -1, "app.js does not mount '/order'");
   assert.ok(menuAt !== -1, "app.js does not mount '/menu'");
-  assert.ok(rootApiAt !== -1, 'the root API router mount moved; this test needs updating');
+  assert.ok(rootApiMatch, 'the root API router mount moved; this test needs updating');
+  const rootApiAt = rootApiMatch.index;
   assert.match(
     src,
     /app\.use\('\/order', limiter, serveOrderPage\)/,

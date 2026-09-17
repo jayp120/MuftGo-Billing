@@ -4,8 +4,8 @@ const { execFileSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const APPSTREAM_FILENAME = 'com.posnic.app.metainfo.xml';
-const APPIMAGE_APPDATA_FILENAME = 'com.posnic.app.appdata.xml';
+const APPSTREAM_FILENAME = 'com.muftgo.billing.metainfo.xml';
+const APPIMAGE_APPDATA_FILENAME = 'com.muftgo.billing.appdata.xml';
 const APPSTREAM_SOURCE = path.join(__dirname, '..', 'builds', 'linux', APPSTREAM_FILENAME);
 
 function platformName(context) {

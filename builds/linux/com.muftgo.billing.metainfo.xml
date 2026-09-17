@@ -9,8 +9,8 @@
   <summary>Offline-first billing and point of sale for retail shops</summary>
   <description>
     <p>
-      MuftGo Billing is free, open-source billing software for retail shops
-      (clothing, kirana, restaurant). It runs the till and its bundled database on
+      MuftGo Billing is free, open-source point-of-sale software for retail
+      shops (clothing, kirana, restaurant). It runs the till and its bundled database on
       one computer, so sales can continue without an internet connection.
       Based on Posnic POS source under AGPL-3.0-only.
     </p>
@@ -50,8 +50,8 @@
 
   <screenshots>
     <screenshot type="default">
-      <caption>A completed offline sale in Posnic Community Edition</caption>
-      <image type="source" width="1920" height="1032">https://raw.githubusercontent.com/Posnic/POS/205c5c9ddc4efcfe179a2c8e4a9f75d5460d685d/docs/images/offline-sale-v1-3-0.png</image>
+      <caption>A completed offline sale in MuftGo Billing</caption>
+      <image type="source" width="1920" height="1032">https://raw.githubusercontent.com/jayp120/MuftGo-Billing/f5f10e7354023d32fdb7bd6ab24567ed5e37b789/docs/images/offline-sale-v1-3-0.png</image>
     </screenshot>
   </screenshots>
 

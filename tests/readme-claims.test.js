@@ -198,7 +198,7 @@ test('every package points support and source at this repository', () => {
   /* frontend/package.json pointed at Posnic/posnicpro, a repository this is
      not, so "report a bug" on npm metadata sent people somewhere else. The
      other two had no repository, bugs or homepage at all. */
-  const REPO = 'github.com/Posnic/POS';
+  const REPO = 'github.com/jayp120/MuftGo-Billing';
 
   for (const dir of ['.', 'api', 'frontend']) {
     const pkg = JSON.parse(
@@ -218,7 +218,7 @@ test('every package points support and source at this repository', () => {
 
 test('the product package uses the canonical product homepage', () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
-  assert.equal(pkg.homepage, 'https://www.posnic.com/');
+  assert.equal(pkg.homepage, 'https://muftgo.com/');
 });
 
 test('every locked sharp copy includes the symlink-validation fix', () => {

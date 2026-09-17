@@ -31,17 +31,17 @@ const branches = () => {
 
 test('the uninstaller has its own welcome and finish, and neither says installed', () => {
   const { uninstall } = branches();
-  assert.match(uninstall, /MUI_WELCOMEPAGE_TITLE "Remove Posnic"/);
-  assert.match(uninstall, /MUI_FINISHPAGE_TITLE "Posnic is removed"/);
+  assert.match(uninstall, /MUI_WELCOMEPAGE_TITLE "Remove MuftGo Billing"/);
+  assert.match(uninstall, /MUI_FINISHPAGE_TITLE "MuftGo Billing is removed"/);
   assert.ok(!/installed/i.test(uninstall), 'the uninstaller still says "installed"');
   assert.ok(!/MUI_FINISHPAGE_RUN/.test(uninstall), 'the uninstaller offers to start what it just removed');
 });
 
 test('the installer keeps its words', () => {
   const { install } = branches();
-  assert.match(install, /MUI_WELCOMEPAGE_TITLE "Welcome to Posnic"/);
-  assert.match(install, /MUI_FINISHPAGE_TITLE "Posnic is installed"/);
-  assert.match(install, /MUI_FINISHPAGE_RUN_TEXT "Start Posnic now"/);
+  assert.match(install, /MUI_WELCOMEPAGE_TITLE "Welcome to MuftGo Billing"/);
+  assert.match(install, /MUI_FINISHPAGE_TITLE "MuftGo Billing is installed"/);
+  assert.match(install, /MUI_FINISHPAGE_RUN_TEXT "Start MuftGo Billing now"/);
 });
 
 test('the uninstaller tells the truth about the data folder', () => {

@@ -14,13 +14,13 @@
   "license": "AGPL-3.0-only",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Posnic/POS.git"
+    "url": "git+https://github.com/jayp120/MuftGo-Billing.git"
   },
   "keywords": [
     "pos"
   ],
   "bugs": {
-    "url": "https://github.com/Posnic/POS/issues"
+    "url": "https://github.com/jayp120/MuftGo-Billing/issues"
   },
   "homepage": "https://github.com/Posnic/POS#readme",
   "devDependencies": {

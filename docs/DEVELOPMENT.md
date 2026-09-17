@@ -32,11 +32,11 @@ few minutes. After that it starts in seconds.
 
 If it does not start, check the log first — it is almost always in there:
 
-| OS | Log |
-|---|---|
-| Windows | `%APPDATA%\posnic\app.log` |
-| macOS | `~/Library/Application Support/posnic/app.log` |
-| Linux | `~/.config/posnic/app.log` |
+| OS      | Log                                                    |
+| ------- | ------------------------------------------------------ |
+| Windows | `%APPDATA%\muftgo-billing\app.log`                     |
+| macOS   | `~/Library/Application Support/muftgo-billing/app.log` |
+| Linux   | `~/.config/muftgo-billing/app.log`                     |
 
 ### Ports
 
@@ -58,12 +58,12 @@ npm run test:coverage # with a coverage report
 
 Current coverage, measured on the API unit suite:
 
-| | |
-|---|---|
+|            |       |
+| ---------- | ----- |
 | Statements | 64.8% |
-| Branches | 48.8% |
-| Functions | 67.0% |
-| Lines | 65.5% |
+| Branches   | 48.8% |
+| Functions  | 67.0% |
+| Lines      | 65.5% |
 
 Branch coverage is the weak one. A test that exercises an untested branch is a
 welcome contribution on its own, without any accompanying fix.
@@ -211,11 +211,11 @@ The number is not decoration. The updater reads it to choose whether a release
 installs itself or waits to be asked, so getting it wrong changes what happens
 on 17 shop counters.
 
-| Change | Bump | What a shop sees |
-|---|---|---|
-| Our pages, API, styling, a bug fix | **patch** `1.0.x` | Downloads quietly, applied when the till is next closed |
-| A new feature, still our own code | **minor** `1.x.0` | Same: quiet download, applied on next close |
-| Electron, Node, a native module rebuild | **major** `x.0.0` | Waits on the Updates screen until the shop starts it |
+| Change                                  | Bump              | What a shop sees                                        |
+| --------------------------------------- | ----------------- | ------------------------------------------------------- |
+| Our pages, API, styling, a bug fix      | **patch** `1.0.x` | Downloads quietly, applied when the till is next closed |
+| A new feature, still our own code       | **minor** `1.x.0` | Same: quiet download, applied on next close             |
+| Electron, Node, a native module rebuild | **major** `x.0.0` | Waits on the Updates screen until the shop starts it    |
 
 **Reserve the major version for the platform.** Not for "this feels like a big
 release" — for the cases where the thing the application runs on has changed.

@@ -10,9 +10,9 @@ const packageJson = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 
 test('CodeMeta preserves the canonical Posnic product identity', () => {
   assert.equal(metadata['@context'], 'https://w3id.org/codemeta/3.0');
   assert.equal(metadata['@type'], 'SoftwareSourceCode');
-  assert.equal(metadata['@id'], 'https://github.com/Posnic/POS');
-  assert.equal(metadata.name, 'Posnic POS');
-  assert.equal(metadata.codeRepository, 'https://github.com/Posnic/POS');
+  assert.equal(metadata['@id'], 'https://github.com/jayp120/MuftGo-Billing');
+  assert.equal(metadata.name, 'MuftGo Billing');
+  assert.equal(metadata.codeRepository, 'https://github.com/jayp120/MuftGo-Billing');
   assert.equal(metadata.issueTracker, packageJson.bugs.url);
   assert.equal(metadata.url, packageJson.homepage);
 });
@@ -39,9 +39,15 @@ test('CodeMeta states a version, and it cannot drift from package.json', () => {
   assert.ok(cffReleaseDate, 'CITATION.cff states no release date');
   assert.equal(cffReleaseDate[1].trim(), '2026-08-28');
 
-  assert.equal(
-    metadata.releaseNotes,
-    `https://github.com/Posnic/POS/releases/tag/v${packageJson.version}`,
+  /* Prefix, not equality: white-label tags carry a -muftgo.N suffix whose
+     counter the release workflow owns, so the exact tag is data. What must
+     not regress is pointing at this repository's releases rather than the
+     upstream's, for the version this file describes. */
+  assert.ok(
+    metadata.releaseNotes.startsWith(
+      `https://github.com/jayp120/MuftGo-Billing/releases/tag/v${packageJson.version}`,
+    ),
+    `releaseNotes points at ${metadata.releaseNotes}`,
   );
 
   const cffLicense = /^license:\s*(.+)$/m.exec(citation);
@@ -82,9 +88,9 @@ test('CodeMeta uses only secure canonical links', () => {
   ];
 
   for (const link of links) assert.match(link, /^https:\/\//);
-  assert.equal(packageJson.homepage, 'https://www.posnic.com/');
-  assert.equal(metadata.url, 'https://www.posnic.com/');
-  assert.equal(metadata.isSourceCodeOf.url, 'https://www.posnic.com/');
+  assert.equal(packageJson.homepage, 'https://muftgo.com/');
+  assert.equal(metadata.url, 'https://muftgo.com/');
+  assert.equal(metadata.isSourceCodeOf.url, 'https://muftgo.com/');
 });
 
 test('README exposes the public POS evaluation and recovery resources', () => {

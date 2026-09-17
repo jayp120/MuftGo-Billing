@@ -4,17 +4,17 @@
   "@id": "https://github.com/jayp120/MuftGo-Billing",
   "name": "MuftGo Billing",
   "alternateName": "MuftGo Billing - retail POS (based on Posnic POS)",
-  "description": "MuftGo Billing — free, offline-first billing software for retail shops (clothing, kirana, restaurant). Based on Posnic POS source (AGPL-3.0-only); release packages contain separately licensed components, including MongoDB Community Server under SSPL-1.0.",
+  "description": "MuftGo Billing — free, offline-first point-of-sale software for retail shops (clothing, kirana, restaurant). Based on Posnic POS source (AGPL-3.0-only); release packages contain separately licensed components, including MongoDB Community Server under SSPL-1.0.",
   "applicationCategory": "BusinessApplication",
   "applicationSubCategory": "Point of sale software",
   "author": {
     "@type": "Organization",
-    "name": "MuftGo",
+    "name": "MuftGo (based on Posnic POS by Posnic Innovations Private Limited)",
     "url": "https://muftgo.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "MuftGo",
+    "name": "MuftGo (based on Posnic POS by Posnic Innovations Private Limited)",
     "url": "https://muftgo.com/"
   },
   "maintainer": {
@@ -59,27 +59,27 @@
   "relatedLink": [
     "https://www.posnic.com/posnic-facts",
     "https://www.posnic.com/trust",
-    "https://github.com/Posnic/POS/blob/main/docs/PRIVACY.md",
-    "https://github.com/Posnic/POS/blob/main/docs/GOVERNANCE.md",
-    "https://github.com/Posnic/POS/blob/main/THIRD-PARTY-NOTICES.md",
+    "https://github.com/jayp120/MuftGo-Billing/blob/main/docs/PRIVACY.md",
+    "https://github.com/jayp120/MuftGo-Billing/blob/main/docs/GOVERNANCE.md",
+    "https://github.com/jayp120/MuftGo-Billing/blob/main/THIRD-PARTY-NOTICES.md",
     "https://www.posnic.com/features",
     "https://www.posnic.com/download",
     "https://www.posnic.com/developers",
-    "https://github.com/Posnic/POS/blob/main/docs/ADOPTION_EVIDENCE.md"
+    "https://github.com/jayp120/MuftGo-Billing/blob/main/docs/ADOPTION_EVIDENCE.md"
   ],
   "softwareVersion": "1.6.1",
   "dateModified": "2026-09-11",
-  "readme": "https://github.com/Posnic/POS/blob/main/README.md",
-  "buildInstructions": "https://github.com/Posnic/POS/blob/main/docs/DEVELOPMENT.md",
-  "releaseNotes": "https://github.com/Posnic/POS/releases/tag/v1.6.1",
+  "readme": "https://github.com/jayp120/MuftGo-Billing/blob/main/README.md",
+  "buildInstructions": "https://github.com/jayp120/MuftGo-Billing/blob/main/docs/DEVELOPMENT.md",
+  "releaseNotes": "https://github.com/jayp120/MuftGo-Billing/releases/tag/v1.6.1-muftgo.1",
   "isSourceCodeOf": {
-    "@id": "https://www.posnic.com/#software",
+    "@id": "https://muftgo.com/#software",
     "@type": "SoftwareApplication",
-    "name": "Posnic POS",
+    "name": "MuftGo Billing",
     "applicationCategory": "BusinessApplication",
     "applicationSubCategory": "Point of sale software",
     "operatingSystem": ["Windows", "macOS", "Linux"],
     "isAccessibleForFree": true,
-    "url": "https://www.posnic.com/"
+    "url": "https://muftgo.com/"
   }
 }

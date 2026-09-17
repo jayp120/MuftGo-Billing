@@ -182,7 +182,7 @@ request and remembers it afterwards.
 
 **You keep the copyright in your work.** It is a licence, not an assignment, and
 you stay free to use and publish your own contribution anywhere else. What it
-adds beyond the DCO is the right to *sublicense*: Posnic publishes this project
+adds beyond the DCO is the right to _sublicense_: Posnic publishes this project
 under AGPL-3.0 and intends to keep doing so, and the same right lets us ship a
 branded, signed and supported build commercially. That paid edition is what pays
 for the work on the open one. Without the sublicense right we could not offer it
@@ -196,9 +196,9 @@ in the agreement lets us take that away.
 - Posnic version (Help → About) and your operating system
 - Steps to reproduce, what you expected, what happened
 - The log file:
-  - Windows `%APPDATA%\posnic\app.log`
-  - macOS `~/Library/Application Support/posnic/app.log`
-  - Linux `~/.config/posnic/app.log`
+  - Windows `%APPDATA%\muftgo-billing\app.log`
+  - macOS `~/Library/Application Support/muftgo-billing/app.log`
+  - Linux `~/.config/muftgo-billing/app.log`
 - For hardware issues: printer/scanner model and connection type
 
 ## Scope notes

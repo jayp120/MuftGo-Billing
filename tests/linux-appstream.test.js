@@ -8,10 +8,10 @@ const path = require('path');
 const { JSDOM } = require('jsdom');
 
 const ROOT = path.join(__dirname, '..');
-const METAINFO_RELATIVE = 'builds/linux/com.posnic.app.metainfo.xml';
+const METAINFO_RELATIVE = 'builds/linux/com.muftgo.billing.metainfo.xml';
 const METAINFO_PATH = path.join(ROOT, METAINFO_RELATIVE);
-const METAINFO_DESTINATION = '/usr/share/metainfo/com.posnic.app.metainfo.xml';
-const APPIMAGE_APPDATA_FILENAME = 'com.posnic.app.appdata.xml';
+const METAINFO_DESTINATION = '/usr/share/metainfo/com.muftgo.billing.metainfo.xml';
+const APPIMAGE_APPDATA_FILENAME = 'com.muftgo.billing.appdata.xml';
 const pkg = require('../package.json');
 
 function parseMetainfo() {
@@ -51,7 +51,7 @@ test('AppStream copy is useful, factual and backed by a real product screenshot'
   assert.match(description, /without an internet connection/i);
   assert.equal(screenshot.getAttribute('width'), '1920');
   assert.equal(screenshot.getAttribute('height'), '1032');
-  assert.match(screenshot.textContent.trim(), /^https:\/\/raw\.githubusercontent\.com\/Posnic\/POS\/[0-9a-f]{40}\//);
+  assert.match(screenshot.textContent.trim(), /^https:\/\/raw\.githubusercontent\.com\/jayp120\/MuftGo-Billing\/[0-9a-f]{40}\//);
   assert.ok(urls.length >= 4 && urls.every((url) => url.startsWith('https://')));
   /* Parsed rather than matched as a substring: "https://www.posnic.com/" can
      sit anywhere inside a longer URL, so evil.example/?x=https://www.posnic.com/
@@ -61,7 +61,7 @@ test('AppStream copy is useful, factual and backed by a real product screenshot'
       try {
         const parsed = new URL(value);
         return parsed.protocol === 'https:'
-          && parsed.hostname === 'www.posnic.com'
+          && parsed.hostname === 'muftgo.com'
           && parsed.pathname === '/';
       } catch (e) {
         return false;

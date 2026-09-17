@@ -37,9 +37,11 @@ test('the ZXing decoder is vendored locally - no network at scan time', () => {
 
 test('the decoder rides the lazy channel, not every page bundle', () => {
   const gulpfile = read('frontend/gulpfile.js/index.js');
+  /* Either quote style: a formatter normalises these, and the mapping is what
+     ships zxing.js - the first desktop scan 404s without it. */
   assert.match(
     gulpfile,
-    /\['static\/script\/js\/zxing\.min\.js',\s*'zxing\.js'\]/,
+    /\[['"]static\/script\/js\/zxing\.min\.js['"],\s*['"]zxing\.js['"]\]/,
     'gulp copyLazyScripts does not ship zxing.js - the first desktop scan would 404',
   );
   const core = read('frontend/static/script/js/core/PosnicPro.js');

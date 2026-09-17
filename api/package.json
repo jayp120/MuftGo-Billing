@@ -101,10 +101,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Posnic/POS.git"
+    "url": "git+https://github.com/jayp120/MuftGo-Billing.git"
   },
   "bugs": {
-    "url": "https://github.com/Posnic/POS/issues"
+    "url": "https://github.com/jayp120/MuftGo-Billing/issues"
   },
   "homepage": "https://github.com/Posnic/POS#readme",
   "overrides": {

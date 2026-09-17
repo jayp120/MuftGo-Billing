@@ -384,6 +384,13 @@
       ],
       "verifyUpdateCodeSignature": true,
       "signAndEditExecutable": true,
+      "signtoolOptions": {
+        "publisherName": "BillMax",
+        "signingHashAlgorithms": [
+          "sha256"
+        ],
+        "sign": "scripts/sign-windows.js"
+      },
       "extraResources": [
         {
           "from": "mongodb",

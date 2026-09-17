@@ -293,7 +293,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --no-install-recommends -y appstream
-          appstreamcli validate --pedantic builds/linux/com.posnic.app.metainfo.xml
+          appstreamcli validate --pedantic builds/linux/com.muftgo.billing.metainfo.xml
 
       # A module that is required but never packaged produces "Cannot find
       # module" on a user's machine and nowhere else. This has happened, so it

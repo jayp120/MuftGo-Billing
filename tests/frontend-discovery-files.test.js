@@ -96,7 +96,9 @@ test('gulp publishes discovery files into frontend/public', () => {
     assert.match(gulpIndex, new RegExp(`['"]${file.replace('.', '\\.')}['"]`));
   }
   assert.match(gulpIndex, /exports\.rootPublicFiles = copyRootPublicFiles/);
-  assert.match(gulpIndex, /parallel\(copyRootPublicFiles,/);
+  /* Whitespace-tolerant: prettier may wrap the parallel() argument list
+     across lines; what matters is that the discovery copy rides the build. */
+  assert.match(gulpIndex, /parallel\(\s*copyRootPublicFiles,/);
 
   if (!fs.existsSync(PUBLIC)) return;
   for (const file of ROOT_FILES) {

@@ -4,13 +4,13 @@ Where to ask, what to include, and what happens after you post.
 
 ## Where to go
 
-| I want to… | Go to |
-|---|---|
-| Report something broken | [New issue → Bug report](https://github.com/Posnic/POS/issues/new?template=bug_report.md) |
-| Suggest a feature | [New issue → Feature request](https://github.com/Posnic/POS/issues/new?template=feature_request.md) |
-| Ask how to do something | [Discussions → Q&A](https://github.com/Posnic/POS/discussions) |
-| Report a security problem | [SECURITY.md](SECURITY.md) — **privately, never a public issue** |
-| Ask about Cloud, billing or a paid licence | info@posnic.com |
+| I want to…                                 | Go to                                                                                               |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| Report something broken                    | [New issue → Bug report](https://github.com/Posnic/POS/issues/new?template=bug_report.md)           |
+| Suggest a feature                          | [New issue → Feature request](https://github.com/Posnic/POS/issues/new?template=feature_request.md) |
+| Ask how to do something                    | [Discussions → Q&A](https://github.com/Posnic/POS/discussions)                                      |
+| Report a security problem                  | [SECURITY.md](SECURITY.md) — **privately, never a public issue**                                    |
+| Ask about Cloud, billing or a paid licence | info@posnic.com                                                                                     |
 
 **Questions belong in Discussions, not Issues.** An issue is a piece of work
 with an end; a question is a conversation. Posting a question as an issue is not
@@ -25,11 +25,11 @@ Two minutes here saves a round trip:
 2. **Check you are on the latest release.**
 3. **Read the log.** It usually names the problem outright:
 
-   | System | Log |
-   |---|---|
-   | Windows | `%APPDATA%\posnic\app.log` |
-   | macOS | `~/Library/Application Support/posnic/app.log` |
-   | Linux | `~/.config/posnic/app.log` |
+   | System  | Log                                                    |
+   | ------- | ------------------------------------------------------ |
+   | Windows | `%APPDATA%\muftgo-billing\app.log`                     |
+   | macOS   | `~/Library/Application Support/muftgo-billing/app.log` |
+   | Linux   | `~/.config/muftgo-billing/app.log`                     |
 
 ## What makes a report we can act on
 
@@ -39,7 +39,7 @@ almost always whether we can reproduce it.
 - **What you did**, step by step, from opening the app
 - **What you expected**
 - **What happened instead** — the exact message, or a screenshot
-- **Posnic version** (*Help → About*) and your operating system
+- **Posnic version** (_Help → About_) and your operating system
 - **The log**, attached
 - For hardware: the **make and model**, and how it is connected
 
@@ -53,16 +53,16 @@ bot, and the project is small — see [GOVERNANCE.md](../docs/GOVERNANCE.md) for
 
 Every issue ends up in one of these:
 
-| Label | Meaning |
-|---|---|
-| `bug` | Confirmed and reproducible |
-| `needs-info` | We cannot reproduce it yet — usually the log is missing |
-| `good first issue` | Small, self-contained, a fine place to start |
-| `help wanted` | Real and wanted, nobody is on it |
-| `enhancement` | Accepted feature work |
-| `discussion` | Worth doing, shape not agreed yet |
-| `wontfix` | Explained and closed, with the reason written down |
-| `duplicate` | Linked to the original |
+| Label              | Meaning                                                 |
+| ------------------ | ------------------------------------------------------- |
+| `bug`              | Confirmed and reproducible                              |
+| `needs-info`       | We cannot reproduce it yet — usually the log is missing |
+| `good first issue` | Small, self-contained, a fine place to start            |
+| `help wanted`      | Real and wanted, nobody is on it                        |
+| `enhancement`      | Accepted feature work                                   |
+| `discussion`       | Worth doing, shape not agreed yet                       |
+| `wontfix`          | Explained and closed, with the reason written down      |
+| `duplicate`        | Linked to the original                                  |
 
 ### Priority
 
